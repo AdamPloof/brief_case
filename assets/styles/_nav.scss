@@ -1,0 +1,48 @@
+@import "variables";
+
+.navbar {
+    &.navbar-light {
+        &.bg-theme-light {
+            // background-color: $primary-lighter;
+            background-color: $grey-darker;
+
+            a {
+                color: $grey-lighter;
+
+                .logo-bright {
+                    color: $primary-light;
+                }
+
+                &:hover {
+                    text-decoration: none;
+                    color: $grey-lightest;
+                }
+            }
+
+            li.active a {
+                color: $grey-lightest;
+            }
+        }
+    }
+}
+
+.sidebar {
+    width: 18%;
+    height: calc(100vh - 56px);
+    background-color: $grey-darkest;
+    padding: 1.5rem;
+
+    li {
+        text-decoration: none;
+        margin: .6rem 0;
+    }
+
+    a {
+        color: $grey-lighter;
+
+        &:hover {
+            text-decoration: none;
+            color: $grey-lightest;
+        }
+    }
+}

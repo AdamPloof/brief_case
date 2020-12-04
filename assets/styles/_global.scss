@@ -1,5 +1,15 @@
 @import "~bootstrap/scss/bootstrap";
+@import "variables";
 
 body {
-    background-color: #f7f7f7;
+    background-color: #fff;
+}
+
+.main-content {
+    display: flex;
+    flex-direction: row;
+}
+
+.container {
+    margin: 36px 24px;
 }

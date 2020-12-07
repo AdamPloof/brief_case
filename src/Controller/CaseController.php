@@ -8,8 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CaseController extends AbstractController
 {
     /**
-    * @Route("/")
-    */
+     * @Route("/")
+     */
     public function index()
     {
         return $this->render("cases/index.html.twig");

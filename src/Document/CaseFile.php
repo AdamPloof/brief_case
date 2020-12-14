@@ -73,7 +73,7 @@ class CaseFile
         return $this->date;
     }
 
-    public function setDate(DateTime $date): void {
+    public function setDate(\DateTime $date): void {
         $this->date = $date;
     }
 
@@ -142,7 +142,9 @@ class Person
         return $this->traits;
     }
 
-    public function addTrait(string $trait): void {
-        $this->traits[] = $trait;
+    public function addTraits(array $traits): void {
+        foreach ($traits as $trait => $val) {
+            $this->traits[$trait] = $val;
+        }
     }
 }

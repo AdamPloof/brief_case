@@ -6,7 +6,7 @@
 parameters:
     env(MONGODB_URL): ''
     env(MONGODB_DB): ''
-    mongodb_server: "mongodb://localhost:27017"
+    mongodb_server: "mongodb://briefCase_user:password@localhost:27017?authSource=BriefCase"
 
 services:
     # default configuration for services in *this* file

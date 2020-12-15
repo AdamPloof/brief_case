@@ -2,24 +2,59 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Document\CaseFile;
 use App\Document\Person;
+use App\Form\CaseType;
+
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 use Doctrine\ODM\MongoDB\DocumentManager;
 
 class CaseController extends AbstractController
 {
     /**
-     * @Route("/")
+     * @Route("/", name="home")
      */
-    public function index()
+    public function index(Request $request)
     {
-        return $this->render("cases/index.html.twig");
+        $context = array();
+        $message = $request->query->get('message');
+        if ($message) {
+            $context['message'] = $message;
+        }
+        return $this->render("cases/index.html.twig", $context);
     }
 
     /**
-     * @Route("/addcase")
+     * @Route("/newcase", name="newcase")
+     */
+    public function newCaseFile(Request $request, DocumentManager $dm)
+    {
+        $caseFile = new CaseFile();
+
+        $form = $this->createForm(CaseType::class, $caseFile);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $caseFile = $form->getData();
+            $dm->persist($caseFile);
+            $dm->flush();
+
+            return $this->redirectToRoute('home', ['message' => 'Created New Case!']);
+        }
+
+        return $this->render("cases/newcase.html.twig", [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/addcase", name="addcase")
      */
     public function addCaseFile(DocumentManager $dm)
     {

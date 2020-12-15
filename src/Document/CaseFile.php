@@ -4,6 +4,9 @@ namespace App\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use App\Document\Person;
 
 /**
  * @MongoDB\Document(db="BriefCase", collection="cases_tab")
@@ -32,11 +35,13 @@ class CaseFile
 
     /**
      * @MongoDB\EmbedOne(targetDocument="Person::class")
+     * @Assert\Valid
      */
     protected $primary_person;
 
     /**
      * @MongoDB\EmbedMany(targetDocument="Person::class")
+     * @Assert\Valid
      */
     protected $others_involved;
 
@@ -99,52 +104,5 @@ class CaseFile
 
     public function setVideo(string $video): void {
         $this->video = $video;
-    }
-}
-
-/**
- * @MongoDB\EmbeddedDocument
- */
-class Person
-{
-    /**
-     * @MongoDB\Field(type="string")
-     */
-    protected $name;
-
-    /**
-     * @MongoDB\Field(type="string")
-     */
-    protected $role;
-
-    /**
-     * @MongoDB\Field(type="hash")
-     */
-    protected $traits = [];
-
-    public function getName(): ?string {
-        return $this->name;
-    }
-
-    public function setName(string $name): void {
-        $this->name = $name;
-    }
-
-    public function getRole(): ?string {
-        return $this->role;
-    }
-
-    public function setRole(string $role): void {
-        $this->role = $role;
-    }
-
-    public function getTraits(): array {
-        return $this->traits;
-    }
-
-    public function addTraits(array $traits): void {
-        foreach ($traits as $trait => $val) {
-            $this->traits[$trait] = $val;
-        }
     }
 }

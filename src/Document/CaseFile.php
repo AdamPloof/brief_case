@@ -3,6 +3,7 @@
 namespace App\Document;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -43,7 +44,7 @@ class CaseFile
      * @MongoDB\EmbedMany(targetDocument="Person::class")
      * @Assert\Valid
      */
-    protected $others_involved;
+    protected $related_persons;
 
     /**
      * @MongoDB\Field(type="string")
@@ -51,7 +52,7 @@ class CaseFile
     protected $video;
 
     public function __construct() {
-        $this->others_involved = new ArrayCollection();
+        $this->related_persons = new ArrayCollection();
     }
 
     public function getId(): ?string {
@@ -90,12 +91,12 @@ class CaseFile
         $this->primary_person = $PrimaryPerson;
     }
 
-    public function getOthersInvolved(): Collection {
-        return $this->others_involved;
+    public function getRelatedPersons(): Collection {
+        return $this->related_persons;
     }
 
-    public function addOtherInvolved(Person $OtherInvolved): void {
-        $this->others_involved[] = $OtherInvolved;
+    public function addRelatedPerson(Person $RelatedPerson): void {
+        $this->related_persons[] = $RelatedPerson;
     }
 
     public function getVideo(): ?string {

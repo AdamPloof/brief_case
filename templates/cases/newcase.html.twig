@@ -4,5 +4,29 @@
 {% endblock %}
 
 {% block body %}
-    {{ form(form) }}
+    {# {{ form(form) }} #}
+
+    {{ form_start(form) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.summary) }}
+        {{ form_row(form.date) }}
+        {{ form_row(form.video) }}
+        {{ form_row(form.primary_person) }}
+
+
+        <h3>Others Involved</h3>
+        <ul id="assocPersonsContainer" class="associated-persons" data-prototype="{{ form_widget(form.associated_persons.vars.prototype)|e('html_attr') }}">
+            {% for field in form.associated_persons %}
+                <li>{{ form_row(field.name) }}</li>
+            {% endfor %}
+        </ul>
+        <button id ="addPersonBtn" type="button" class="btn btn-info add_person" data-collection-holder-class="associated-persons">Add Person</button>
+
+    {{ form_end(form) }}
+
 {% endblock body %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('newcase') }}
+{% endblock %}

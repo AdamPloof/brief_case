@@ -44,7 +44,7 @@ class CaseFile
      * @MongoDB\EmbedMany(targetDocument="Person::class")
      * @Assert\Valid
      */
-    protected $related_persons;
+    protected $associated_persons;
 
     /**
      * @MongoDB\Field(type="string")
@@ -52,7 +52,7 @@ class CaseFile
     protected $video;
 
     public function __construct() {
-        $this->related_persons = new ArrayCollection();
+        $this->associated_persons = new ArrayCollection();
     }
 
     public function getId(): ?string {
@@ -91,12 +91,18 @@ class CaseFile
         $this->primary_person = $PrimaryPerson;
     }
 
-    public function getRelatedPersons(): Collection {
-        return $this->related_persons;
+    public function getAssociatedPersons(): Collection {
+        return $this->associated_persons;
     }
 
-    public function addRelatedPerson(Person $RelatedPerson): void {
-        $this->related_persons[] = $RelatedPerson;
+    public function addAssociatedPerson(Person $associatedPerson): void {
+        $this->associated_persons[] = $associatedPerson;
+    }
+
+    public function removeAssociatedPerson(Person $associatedPerson) {
+        // TODO: So far as I know, this won't actually work, 
+        // this is just a placeholder since there must be an add and remove method for associated persons
+        unset($this->associated_persons[$associatedPerson]);
     }
 
     public function getVideo(): ?string {

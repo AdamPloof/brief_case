@@ -26,10 +26,11 @@ class CaseType extends AbstractType
                 'required' => false,
             ])
             ->add('primary_person', PersonType::class)
-            ->add('related_persons', CollectionType::class, [
+            ->add('associated_persons', CollectionType::class, [
                 'entry_type' => PersonType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
+                'label' => false,
             ])
             ->add('submit', SubmitType::class, ['label' => 'Create Case']);
     }

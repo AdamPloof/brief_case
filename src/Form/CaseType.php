@@ -7,7 +7,7 @@ use App\Document\CaseFile;
 use App\Form\PersonType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -20,8 +20,10 @@ class CaseType extends AbstractType
     {
         $builder
             ->add('description', TextType::class)
+            ->add('date', DateTimeType::class, [
+                'widget' => 'single_text'
+            ])
             ->add('summary', TextareaType::class)
-            ->add('date', DateType::class)
             ->add('video', TextType::class, [
                 'required' => false,
             ])

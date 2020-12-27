@@ -3,3 +3,28 @@
         list-style-type: none;
     }
 }
+
+.form-control:disabled, .form-control[readonly] {
+	background-color: #ffffff;
+    opacity: 1;
+    &:focus {
+        background-color: #f0f4f7;
+    }
+}
+
+.person-form {
+    &.card-grid {
+        margin-bottom: 12px;
+        .btn {
+            float: right;
+            position: relative;
+            top: 36%;
+        }
+    }
+}
+
+.embed-form-grid {
+    display: grid;
+    grid-gap: 18px;
+    grid-template-columns: 1fr 1fr;
+}

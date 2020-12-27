@@ -54,6 +54,13 @@ class CaseController extends AbstractController
     }
 
     /**
+     * @Route("/reports", name="reports")
+     */
+    public function caseReports(Request $request) {
+        return $this->render('cases/reports.html.twig');
+    }
+
+    /**
      * @Route("/addcase", name="addcase")
      */
     public function addCaseFile(DocumentManager $dm)

@@ -46,3 +46,11 @@
         }
     }
 }
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    // height: 36px;
+    width: 100%;
+    background-color: $grey-light;
+}

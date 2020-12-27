@@ -10,6 +10,7 @@ require('bootstrap');
 
 $(document).ready(function() {
     initDatePickr();
+    checkSidebarHeight();
 });
 
 function initDatePickr() {
@@ -24,4 +25,14 @@ function initDatePickr() {
         altFormat: 'F j, Y h:i K',
         dateFormat: 'Y-m-d H:i:s',
     });
+}
+
+function checkSidebarHeight() {
+    const docHeight = document.body.scrollHeight;
+    const windowHeight = window.innerHeight;
+    let sidebar = document.getElementsByClassName('sidebar')[0];
+
+    if (docHeight > windowHeight) {
+        sidebar.style.height = 'auto';
+    }
 }

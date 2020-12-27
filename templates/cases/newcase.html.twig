@@ -73,13 +73,19 @@
         {{ formMacros.makePersonForm(form.primary_person) }}
 
 
-        <h3 style="margin-top: 24px;">Others Involved</h3>
+        <div class="form-section-header">
+            <div class="form-header-logo">
+                <h3>Others Involved</h3>
+            </div>
+            <div class="form-header-options">
+                <button id ="addPersonBtn" type="button" class="btn btn-info btn-sm add_person" data-collection-holder-class="associated-persons">Add Person</button>
+            </div>
+        </div>
         <div id="assocPersonsContainer" class="associated-persons embed-form-grid" data-prototype="{{ formMacros.makePersonForm(form.associated_persons.vars.prototype, 1)|e('html_attr') }}">
             {% for field in form.associated_persons %}
                 <div class="form-card">{{ form_row(field.name) }}</div class="form-card">
             {% endfor %}
         </div>
-        <button id ="addPersonBtn" type="button" class="btn btn-info btn-sm add_person" data-collection-holder-class="associated-persons">Add Person</button>
 
     {{ form_end(form) }}
 </div>

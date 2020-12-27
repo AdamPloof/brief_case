@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     initAddOtherPersons();
+    initRemoveOtherPersons();
 });
 
 function initAddOtherPersons() {
@@ -17,15 +18,46 @@ function initAddOtherPersons() {
     });
 }
 
+function initRemoveOtherPersons() {
+    let removeBtns = document.getElementsByClassName('remove-case-btn');
+
+    if (removeBtns.length == 0) {
+        return;
+    }
+
+    for (let btn of removeBtns) {
+        btn.addEventListener('click', (e) => {
+            let subForm = e.target.closest('.person-form.card.card-grid');
+            removeFormFromCollection(subForm);
+        })
+    }
+}
+
 function addFormToCollection(collectionContainerClass) {
     let collectionContainer = document.getElementsByClassName(collectionContainerClass)[0];
     let prototype = collectionContainer.dataset.prototype;
-    let index = collectionContainer.dataset.index;
+    let index = parseInt(collectionContainer.dataset.index);
     let newForm = prototype;
     
     newForm = newForm.replace(/__name__/g, index);
     collectionContainer.dataset.index = index + 1;
-    newFormLi = document.createElement('li');
-    newFormLi.insertAdjacentHTML('beforeend', newForm);
-    collectionContainer.appendChild(newFormLi);
+    newFormContainer = document.createElement('div');
+    newFormContainer.classList.add('person-form', 'card', 'card-grid');
+    newFormContainer.insertAdjacentHTML('beforeend', newForm);
+
+    collectionContainer.appendChild(newFormContainer);
+
+    // Add even listener to remove btn
+    let removeBtn = newFormContainer.querySelector('.remove-case-btn');
+    removeBtn.addEventListener('click', (e) => {
+        let subForm = e.target.closest('.person-form.card.card-grid');
+        removeFormFromCollection(subForm);
+    })
+}
+
+function removeFormFromCollection(subForm) {
+    while (subForm.firstChild) {
+        subForm.removeChild(subForm.lastChild);
+    }
+    subForm.remove();
 }

@@ -35,13 +35,13 @@ class CaseFile
     protected $date;
 
     /**
-     * @MongoDB\EmbedOne(targetDocument="Person::class")
+     * @MongoDB\EmbedOne(targetDocument=Person::class)
      * @Assert\Valid
      */
     protected $primary_person;
 
     /**
-     * @MongoDB\EmbedMany(targetDocument="Person::class")
+     * @MongoDB\EmbedMany(targetDocument=Person::class)
      * @Assert\Valid
      */
     protected $associated_persons;
@@ -75,7 +75,7 @@ class CaseFile
         $this->summary = $summary;
     }
 
-    public function getDate(): ?DateTime {
+    public function getDate(): ?\DateTime {
         return $this->date;
     }
 

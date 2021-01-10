@@ -74,7 +74,9 @@
         </div>
         <div id="assocPersonsContainer" class="associated-persons embed-form-grid" data-prototype="{{ formMacros.makePersonForm(form.associated_persons.vars.prototype, 1)|e('html_attr') }}">
             {% for assoc_person in form.associated_persons %}
-                {{ formMacros.makePersonForm(assoc_person, 1) }}
+                <div class="person-form card card-grid">
+                    {{ formMacros.makePersonForm(assoc_person, 1) }}
+                </div>
             {% endfor %}
         </div>
 

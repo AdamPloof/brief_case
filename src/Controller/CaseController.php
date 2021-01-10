@@ -83,34 +83,6 @@ class CaseController extends AbstractController
     }
 
     /**
-     * @Route("/getcase", name="getcase")
-     */
-    public function getRandomCaseFile(Request $request, DocumentManager $dm) {
-        // TEST VIEW FOR FETCHING MONGO OBJECT!
-        $caseFile = $dm->getRepository(CaseFile::class)->findAll()[0];
-
-        if (!$caseFile) {
-            throw $this->createNotFoundException('Could not find Case with id: ' . $id);
-        }
-
-        $form = $this->createForm(CaseType::class, $caseFile);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $caseFile = $form->getData();
-            $dm->persist($caseFile);
-            $dm->flush();
-
-            return $this->redirectToRoute('home', ['message' => 'Created New Case!']);
-        }
-
-        return $this->render("cases/editcase.html.twig", [
-            'form' => $form->createView(),
-            'form_title' => 'Edit Case',
-        ]);
-    }
-
-    /**
      * @Route("/reports", name="reports")
      */
     public function caseReports(Request $request) {

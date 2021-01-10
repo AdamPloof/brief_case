@@ -44,14 +44,8 @@ class Person
         return $this->traits;
     }
 
-    public function setTraits(string $strTraits): void {
-        // Traits are submitted as strings of key:value pairs separated by commas
-        // Ex: 'height:tall,weight:160lb,disposition:sunny'
-        $traits = explode(',', $strTraits);
-        foreach ($traits as $trait) {
-            $hash = explode(':', $trait);
-            $this->traits[$hash[0]] = $hash[1];
-        }
+    public function setTraits(array $traits): void {
+        $this->traits = $traits;
     }
 
     public function removeTrait(string $trait): void {

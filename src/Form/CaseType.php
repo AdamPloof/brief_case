@@ -3,8 +3,8 @@
 namespace App\Form;
 
 use App\Document\CaseFile;
-
 use App\Form\PersonType;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -34,6 +34,7 @@ class CaseType extends AbstractType
                 'allow_add' => true,
                 'allow_delete' => true,
                 'label' => false,
+                'by_reference' => false,
             ])
             ->add('submit', SubmitType::class, ['label' => 'Create Case']);
     }

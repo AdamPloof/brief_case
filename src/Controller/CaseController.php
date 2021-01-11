@@ -31,6 +31,23 @@ class CaseController extends AbstractController
     }
 
     /**
+     * @Route("/case/{id}", name="viewcase", requirements={"id"="[\d\w]+"})
+     */
+    public function viewCaseFile(Request $request, DocumentManager $dm, $id)
+    {
+        $mongoId = new \MongoDB\BSON\ObjectId($id);
+        $caseFile = $dm->getRepository(CaseFile::class)->find($mongoId);
+
+        if (!$caseFile) {
+            throw $this->createNotFoundException('Could not find Case with id: ' . $id);
+        }
+
+        return $this->render("cases/viewcase.html.twig", [
+            "case" => $caseFile,
+        ]);
+    }
+
+    /**
      * @Route("/newcase", name="newcase")
      */
     public function newCaseFile(Request $request, DocumentManager $dm)

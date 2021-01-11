@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Case {{ case.description }}
+{% endblock title %}
+
+{% block body %}
+    <h2>{{ case.description }}</h2>
+    <p>{{ case.summary }}</p>
+
+{% endblock body %}

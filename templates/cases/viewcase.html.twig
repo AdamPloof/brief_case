@@ -1,11 +1,54 @@
 {% extends 'base.html.twig' %}
 
+{% import _self as viewMacros %}
+
+{% macro makePersonContainer(person, personType) %}
+    <div class="person-container {{ personType }}">
+        <div class="person-name">
+            {{ person.name }}
+        </div>
+        <div class="person-role">
+            {{ person.role }}
+        </div>
+        {% if person.traits %}
+        <!-- TODO: loop of keys as well as values for traits -->
+            {% for trait in person.traits %}
+                <div class="trait-row">
+                    {{ trait }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endmacro makePersonContainer %}
+
 {% block title %}
     Case {{ case.description }}
 {% endblock title %}
 
 {% block body %}
-    <h2>{{ case.description }}</h2>
-    <p>{{ case.summary }}</p>
+<div class="case-container">
+    <div class="case-header">
+        <div class="header-log">
+            <h2>{{ case.description }}</h2>
+        </div>
+        <div class="header-info">
+            <small class="text-muted">
+                {{ case.date|date("m/d/Y g:ia") }}
+            </small>
+        </div>
+    </div>
+    <div class="case-body">
+        <p>{{ case.summary }}</p>
+    </div>
+
+    {{ viewMacros.makePersonContainer(case.primaryPerson, "primary-person") }}
+
+    {% if case.associatedPersons %}
+        {% for person in case.associatedPersons %}
+            {{ viewMacros.makePersonContainer(person, "assoc-person") }}
+        {% endfor %}
+    {% endif %}
+</div>
+
 
 {% endblock body %}

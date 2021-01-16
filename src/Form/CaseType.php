@@ -36,7 +36,7 @@ class CaseType extends AbstractType
                 'label' => false,
                 'by_reference' => false,
             ])
-            ->add('submit', SubmitType::class, ['label' => 'Create Case']);
+            ->add('submit', SubmitType::class, ['label' => 'Submit']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

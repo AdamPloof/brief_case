@@ -21,7 +21,11 @@ class TraitsToArrayTransformer implements DataTransformerInterface
         }
 
         foreach ($traits as $trait => $val) {
-            $traitStr .= $trait . ':' . $val . ',';
+            $traitStr .= $trait . ':' . $val;
+
+            if ($trait != array_key_last($traits)) {
+                $traitStr .= ',';
+            }
         }
         return $traitStr;
     }

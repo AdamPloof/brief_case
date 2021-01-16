@@ -100,9 +100,11 @@ class CaseFile
     }
 
     public function removeAssociatedPerson(Person $associatedPerson) {
-        // TODO: So far as I know, this won't actually work, 
-        // this is just a placeholder since there must be an add and remove method for associated persons
-        unset($this->associated_persons[$associatedPerson]);
+        foreach ($this->associated_persons as $key => $person) {
+            if ($person == $associatedPerson) {
+                unset($this->associated_persons[$key]);
+            }
+        }
     }
 
     public function getVideo(): ?string {

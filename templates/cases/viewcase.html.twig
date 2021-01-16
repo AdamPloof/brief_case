@@ -3,18 +3,17 @@
 {% import _self as viewMacros %}
 
 {% macro makePersonContainer(person, personType) %}
-    <div class="person-container {{ personType }}">
+    <div class="person-container">
         <div class="person-name">
-            {{ person.name }}
+            <h5>{{ person.name }}</h5>
         </div>
         <div class="person-role">
-            {{ person.role }}
+            <strong>Role: </strong>{{ person.role }}
         </div>
         {% if person.traits %}
-        <!-- TODO: loop of keys as well as values for traits -->
-            {% for trait in person.traits %}
+            {% for trait, val in person.traits %}
                 <div class="trait-row">
-                    {{ trait }}
+                    <strong>{{ trait }}:&nbsp;</strong> {{ val }}
                 </div>
             {% endfor %}
         {% endif %}
@@ -28,26 +27,46 @@
 {% block body %}
 <div class="case-container">
     <div class="case-header">
-        <div class="header-log">
+        <div class="header-logo">
             <h2>{{ case.description }}</h2>
         </div>
         <div class="header-info">
-            <small class="text-muted">
-                {{ case.date|date("m/d/Y g:ia") }}
+            <small class="text-soft">
+                {{ case.date|date("F j, Y - g:ia") }}
             </small>
         </div>
     </div>
     <div class="case-body">
-        <p>{{ case.summary }}</p>
+        <div class="summary">
+            <div class="body-header">
+                <h4>Summary</h4>
+            </div>
+            <div class="summary-body">
+                <p>{{ case.summary }}</p>
+            </div>
+        </div>
+
+        <div class="primary-person">
+            <div class="body-header">
+                <h4>Primary Person</h4>
+            </div>
+            {{ viewMacros.makePersonContainer(case.primaryPerson, "primary-person") }}
+        </div>
+        
+        <div class="associated-persons">
+            <div class="body-header">
+                <h4>Associated Persons</h4>
+            </div>
+            {% if case.associatedPersons %}
+            {% for person in case.associatedPersons %}
+                {{ viewMacros.makePersonContainer(person, "assoc-person") }}
+                {% if person != case.associatedPersons[case.associatedPersons|length - 1] %}
+                    <hr />
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        </div>
     </div>
-
-    {{ viewMacros.makePersonContainer(case.primaryPerson, "primary-person") }}
-
-    {% if case.associatedPersons %}
-        {% for person in case.associatedPersons %}
-            {{ viewMacros.makePersonContainer(person, "assoc-person") }}
-        {% endfor %}
-    {% endif %}
 </div>
 
 

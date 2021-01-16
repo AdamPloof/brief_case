@@ -90,7 +90,7 @@ class CaseController extends AbstractController
             $dm->persist($caseFile);
             $dm->flush();
 
-            return $this->redirectToRoute('home', ['message' => 'Created New Case!']);
+            return $this->redirectToRoute('home', ['message' => $caseFile->getDescription() . ' has been updated!']);
         }
 
         return $this->render("cases/editcase.html.twig", [

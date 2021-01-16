@@ -1,0 +1,84 @@
+@import "variables";
+
+.case-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid $grey-lighter;
+    background-color: $grey-lightest;
+
+    .case-header,
+    .case-body,
+    .person-container,
+    .trait-row,
+    .case-body .summary {
+        display: flex;
+    }
+
+    .case-header,
+    .case-body,
+    .person-container {
+        width: 100%;
+    }
+
+    .case-header {
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: $primary-darker;
+        color: $grey-lightest;
+        padding: 1.5rem;
+
+        .header-info {
+            margin-top: auto;
+            margin-bottom: auto;
+
+            small.text-soft {
+                font-size: 90%;
+                color: $grey-lighter;
+            }
+        }
+    }
+
+    .case-body {
+        flex-direction: column;
+
+        .summary,
+        .primary-person,
+        .associated-persons {
+            border-bottom: 1px solid $grey-lighter;
+
+            p {
+                margin: 0;
+            }
+        }
+
+        .summary-body,
+        .person-container {
+            padding: .75rem 1.5rem;
+        }
+
+        .body-header {
+            background-color: $grey;
+            color: $grey-darkerer;
+
+            & > * {
+                padding: .5rem 1.5rem .5rem 1.5rem;
+                margin: auto;
+            }
+        }
+
+        .summary {
+            flex-direction: column;
+        }
+
+    }
+
+    .person-container {
+        flex-direction: column;
+
+        .trait-row {
+            flex-direction: row;
+        }
+    }
+}

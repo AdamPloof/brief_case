@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -24,8 +25,10 @@ class CaseType extends AbstractType
                 'widget' => 'single_text'
             ])
             ->add('summary', TextareaType::class)
-            ->add('video', TextType::class, [
+            ->add('video', FileType::class, [
+                'label' => 'Upload Video',
                 'required' => false,
+                'mapped' => false,
             ])
             ->add('primary_person', PersonType::class)
             ->add('associated_persons', CollectionType::class, [

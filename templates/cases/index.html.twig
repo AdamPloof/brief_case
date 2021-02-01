@@ -1,8 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>This is the home page</h1>
+    <h1>Cases</h1>
     {% if message is defined %}
         <p>{{ message }}</p>
+    {% endif %}
+    {% if cases %}
+        <ul>
+            {% for case in cases %}
+                <li>
+                    <a href="{{ path('viewcase', {id: case.id}) }}">{{ case.description }}</a>
+                </li>
+            {% endfor %}
+        </ul>
     {% endif %}
 {% endblock body %}

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
 
@@ -20,13 +21,17 @@ class CaseController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function index(Request $request)
+    public function index(Request $request, DocumentManager $dm)
     {
         $context = array();
         $message = $request->query->get('message');
         if ($message) {
             $context['message'] = $message;
         }
+
+        $cases = $dm->getRepository(CaseFile::class)->findAll();
+        $context['cases'] = $cases;
+
         return $this->render("cases/index.html.twig", $context);
     }
 
@@ -58,6 +63,22 @@ class CaseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $video */
+            $video = $form->get('video')->getData();
+
+            if ($video) {
+                $originalFilename = pathinfo($video->getClientOriginalName(), PATHINFO_FILENAME);
+
+                try {
+                    $video->move(
+                        $this->getParameter('video_directory'),
+                        $originalFilename
+                    );
+                } catch (FileException $e) {
+                    dd($e);
+                }
+            }
+            
             $caseFile = $form->getData();
             $dm->persist($caseFile);
             $dm->flush();

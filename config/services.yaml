@@ -7,6 +7,7 @@ parameters:
     env(MONGODB_URL): ''
     env(MONGODB_DB): ''
     mongodb_server: "mongodb://briefCase_user:password@localhost:27017?authSource=BriefCase"
+    video_directory: '%kernel.project_dir%/public/uploads/video'
 
 services:
     # default configuration for services in *this* file

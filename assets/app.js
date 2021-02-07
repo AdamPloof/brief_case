@@ -11,6 +11,7 @@ require('bootstrap');
 $(document).ready(function() {
     initDatePickr();
     checkSidebarHeight();
+    initFileUploadInput();
 });
 
 function initDatePickr() {
@@ -34,5 +35,19 @@ function checkSidebarHeight() {
 
     if (docHeight > windowHeight) {
         sidebar.style.height = 'auto';
+    }
+}
+
+function initFileUploadInput() {
+    const fileInputs = document.getElementsByClassName('custom-file-input');
+
+    if (fileInputs.length > 0) {
+        for (let input of fileInputs) {
+            input.addEventListener('change', (e) => {
+                let inputFile = e.target;
+                let inputLabel = inputFile.parentElement.querySelector('.custom-file-label');
+                inputLabel.textContent = inputFile.files[0].name;
+            });
+        }
     }
 }

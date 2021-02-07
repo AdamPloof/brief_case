@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 
 class CaseType extends AbstractType
 {
@@ -25,10 +26,17 @@ class CaseType extends AbstractType
                 'widget' => 'single_text'
             ])
             ->add('summary', TextareaType::class)
-            ->add('video', FileType::class, [
+            ->add('video_file', FileType::class, [
                 'label' => 'Upload Video',
                 'required' => false,
                 'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => 'video/*',
+                        'mimeTypesMessage' => 'File is not a valid video file.',
+                        'maxSize' => '4M',
+                    ]),
+                ]
             ])
             ->add('primary_person', PersonType::class)
             ->add('associated_persons', CollectionType::class, [

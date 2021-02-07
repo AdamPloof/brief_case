@@ -9,7 +9,7 @@
         <ul>
             {% for case in cases %}
                 <li>
-                    <a href="{{ path('viewcase', {id: case.id}) }}">{{ case.description }}</a>
+                    <a href="{{ path('viewcase', {id: case.id}) }}">{{ case.description }}</a> - <a href="{{ path('editcase', {id: case.id}) }}">Edit</a>
                 </li>
             {% endfor %}
         </ul>

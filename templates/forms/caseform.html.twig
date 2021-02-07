@@ -47,6 +47,12 @@
     {% endif %}
 {% endmacro makePersonForm %}
 
+{% if video_filename is defined and video_filename is not null %}
+    {% set video_label = video_filename %}
+{% else %}
+    {% set video_label = 'Select a video file...' %}
+{% endif %}
+
 <div class="form-wrapper">
     <h2>{{ form_title }}</h2>
     <hr>
@@ -60,7 +66,11 @@
             </div>
         </div>
         {{ form_row(form.summary) }}
-        {{ form_row(form.video) }}
+        {{ form_row(form.video_file, {
+            attr: {
+                placeholder: video_label
+            }
+        }) }}
 
         {{ formMacros.makePersonForm(form.primary_person) }}
 

@@ -6,6 +6,8 @@ use App\Document\CaseFile;
 use App\Document\Person;
 use App\Form\CaseType;
 
+use App\Service\UploaderHelper;
+
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,7 +57,7 @@ class CaseController extends AbstractController
     /**
      * @Route("/newcase", name="newcase")
      */
-    public function newCaseFile(Request $request, DocumentManager $dm)
+    public function newCaseFile(Request $request, DocumentManager $dm, UploaderHelper $uploaderHelper)
     {
         $caseFile = new CaseFile();
 
@@ -64,19 +66,11 @@ class CaseController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var UploadedFile $video */
-            $video = $form->get('video')->getData();
+            $video = $form->get('video_file')->getData();
 
             if ($video) {
-                $originalFilename = pathinfo($video->getClientOriginalName(), PATHINFO_FILENAME);
-
-                try {
-                    $video->move(
-                        $this->getParameter('video_directory'),
-                        $originalFilename
-                    );
-                } catch (FileException $e) {
-                    dd($e);
-                }
+                $newFileName = $uploaderHelper->uploadVideoFile($video);
+                $caseFile->setVideo($newFileName);
             }
             
             $caseFile = $form->getData();
@@ -95,7 +89,7 @@ class CaseController extends AbstractController
     /**
      * @Route("/editcase/{id}", name="editcase", requirements={"id"="[\d\w]+"})
      */
-    public function editCaseFile(Request $request, DocumentManager $dm, $id) {
+    public function editCaseFile(Request $request, DocumentManager $dm, UploaderHelper $uploaderHelper, $id) {
         $mongoId = new \MongoDB\BSON\ObjectId($id);
         $caseFile = $dm->getRepository(CaseFile::class)->find($mongoId);
 
@@ -107,6 +101,14 @@ class CaseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $video */
+            $video = $form->get('video_file')->getData();
+
+            if ($video) {
+                $newFileName = $uploaderHelper->uploadVideoFile($video);
+                $caseFile->setVideo($newFileName);
+            }
+
             $caseFile = $form->getData();
             $dm->persist($caseFile);
             $dm->flush();
@@ -114,10 +116,23 @@ class CaseController extends AbstractController
             return $this->redirectToRoute('home', ['message' => $caseFile->getDescription() . ' has been updated!']);
         }
 
-        return $this->render("cases/editcase.html.twig", [
+        $context = [
             'form' => $form->createView(),
             'form_title' => 'Edit Case',
-        ]);
+            'video_filename' => $this->getOriginalVideoFilename($caseFile->getVideo())
+        ];
+
+        return $this->render("cases/editcase.html.twig", $context);
+    }
+
+    private function getOriginalVideoFilename($videoFilename) {
+        if (!isset($videoFilename)) {
+            return null;
+        }
+
+        $parts = explode('-', $videoFilename);
+        $id = array_shift($parts);
+        return implode('', $parts);
     }
 
     /**

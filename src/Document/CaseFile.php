@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use App\Service\UploaderHelper;
 use App\Document\Person;
 
 /**
@@ -113,5 +114,9 @@ class CaseFile
 
     public function setVideo(string $video): void {
         $this->video = $video;
+    }
+
+    public function getVideoPath() {
+        return UploaderHelper::VIDEO_PATH . '/' . $this->getVideo();
     }
 }

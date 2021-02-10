@@ -9,10 +9,12 @@ class UploaderHelper
     const VIDEO_PATH = 'video';
     private $uploadsPath;
 
+    // $uploadsPath is provided by a service parameter in services.yaml
     public function __construct(string $uploadsPath) {
         $this->uploadsPath = $uploadsPath;
     }
 
+    // Move uploaded video file to uploads dir
     // Return the path to the public video uploads dir
     public function uploadVideoFile(UploadedFile $video): string {
         $originalFilename = pathinfo($video->getClientOriginalName(), PATHINFO_FILENAME);

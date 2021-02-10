@@ -46,16 +46,18 @@
             </div>
         </div>
 
-        <div class="video">
-            <div class="body-header">
-                <h4>Video</h4>
+        {% if case.video %}
+            <div class="video">
+                <div class="body-header">
+                    <h4>Video</h4>
+                </div>
+                <div class="summary-body">
+                    <video  width="320px" height="240px" controls>
+                        <source src="{{ uploaded_asset(case.videoPath) }}" type="video/mp4">
+                    </video>
+                </div>
             </div>
-            <div class="summary-body">
-                <video  width="320px" height="240px" controls>
-                    <source src="{{ uploaded_asset(case.videoPath) }}" type="video/mp4">
-                </video>
-            </div>
-        </div>
+        {% endif %}
 
         <div class="primary-person">
             <div class="body-header">

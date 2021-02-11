@@ -83,7 +83,6 @@ function loadPrimaryPersons() {
             timeout = setTimeout(() => {
                 fetchPrimaryPersons(name)
                 .then(data => {
-                    console.log(data);
                     autocompletePersonInput(primaryPersonInput, data);
                 });
             }, 600);
@@ -109,10 +108,10 @@ function autocompletePersonInput(inp, personsData) {
     let currentFocus;
     let names = [];
     let persons = [
-        {name: 'Johan', role: 'shoplifter', traits: 'hieght:tall,hair:dark'}, 
-        {name: 'Susanna', role: 'shoplifter', traits: 'hieght:tall,hair:dark'}, 
-        {name: 'Maria', role: 'shoplifter', traits: 'hieght:tall,hair:dark'}, 
-        {name: 'Michelangelo', role: 'shoplifter', traits: 'hieght:tall,hair:dark'}
+        {name: 'Johan', role: 'shoplifter', traits: {hieght: 'tall', hair: 'dark'}}, 
+        {name: 'Susanna', role: 'shoplifter', traits: {hieght: 'tall', hair: 'dark'}}, 
+        {name: 'Maria', role: 'shoplifter', traits: {hieght: 'tall', hair: 'dark'}}, 
+        {name: 'Michelangelo', role: 'shoplifter', traits: {hieght: 'tall', hair: 'dark'}}
     ];
     personsData.push(...persons)
 
@@ -151,7 +150,7 @@ function autocompletePersonInput(inp, personsData) {
             let selectedPerson = personsData.find((el) => el.name == selectedName);
             inp.value = selectedName;
             roleInput.value = selectedPerson.role;
-            traitsInput.value = selectedPerson.traits;
+            traitsInput.value = transformTraitsToStr(selectedPerson.traits);
 
             closeAllLists();
         });
@@ -226,4 +225,19 @@ function autocompletePersonInput(inp, personsData) {
     document.addEventListener('click', (e) => {
         closeAllLists(e.target);
     })
+}
+
+function transformTraitsToStr(traits) {
+    let traitsStr = '';
+
+    if (traits) {
+        for (let key in traits) {
+            traitsStr += `${key}:${traits[key]},`;
+        }
+
+        // Removing the comma from the last trait
+        traitsStr = traitsStr.substr(0, traitsStr.length - 1);
+    }
+
+    return traitsStr;
 }

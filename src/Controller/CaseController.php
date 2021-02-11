@@ -178,10 +178,9 @@ class CaseController extends AbstractController
     }
 
     /**
-     * @Route("/primary-persons/{name}", options={"expose"=true}, name="primary_persons", requirements={"name"="[\d\w]+"})
+     * @Route("/primary-persons/{name}", options={"expose"=true}, name="primary_persons")
      */
     public function getPrimaryPersons(DocumentManager $dm, $name): Response {
-        // TODO: Switch up the requirements to be able to handle white space.
         $name = new \MongoDB\BSON\Regex($name, 'i');
         $persons = array();
 

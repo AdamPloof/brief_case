@@ -1,3 +1,5 @@
+@import "variables";
+
 .form-section-header {
     display: flex;
     flex-direction: row;
@@ -45,4 +47,36 @@
     display: grid;
     grid-gap: 18px;
     grid-template-columns: 1fr 1fr;
+}
+
+// Autocomplete styles
+.form-group.autocomplete {
+    position: relative;
+}
+
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #ced4da;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+
+    div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #ced4da;
+
+        &:hover {
+            background-color: $grey-lighterer;
+        }
+    }
+}
+
+.autocomplete-active {
+    background-color: $primary-lightest !important;
+    color: $grey-darkest;
 }

@@ -71,6 +71,8 @@ function removeFormFromCollection(subForm) {
 // Watch the primary person input and fetch existing person that match input
 function loadPrimaryPersons() {
     const primaryPersonInput = document.getElementById('case_primary_person_name');
+    primaryPersonInput.parentElement.classList.add('autocomplete');
+
     let timeout = null;
 
     primaryPersonInput.addEventListener('input', (e) => {
@@ -82,6 +84,7 @@ function loadPrimaryPersons() {
                 fetchPrimaryPersons(name)
                 .then(data => {
                     console.log(data);
+                    autocompletePersonInput(primaryPersonInput, data);
                 });
             }, 600);
         }
@@ -99,4 +102,128 @@ async function fetchPrimaryPersons(personName = '') {
     }
     const response = await fetch(url, params);
     return response.json();
+}
+
+// TODO: Need to resize window/content container height when autocomplete list exceeds window height. -- Important! --
+function autocompletePersonInput(inp, personsData) {
+    let currentFocus;
+    let names = [];
+    let persons = [
+        {name: 'Johan', role: 'shoplifter', traits: 'hieght:tall,hair:dark'}, 
+        {name: 'Susanna', role: 'shoplifter', traits: 'hieght:tall,hair:dark'}, 
+        {name: 'Maria', role: 'shoplifter', traits: 'hieght:tall,hair:dark'}, 
+        {name: 'Michelangelo', role: 'shoplifter', traits: 'hieght:tall,hair:dark'}
+    ];
+    personsData.push(...persons)
+
+    const roleInput = document.getElementById('case_primary_person_role');
+    const traitsInput = document.getElementById('case_primary_person_traits');
+
+    for (let personObj of personsData) {
+        names.push(personObj.name);
+    }
+
+    let typedVal = inp.value;
+    let autoList = document.createElement('div');
+    
+    closeAllLists();
+    if (!typedVal) {
+        return false;
+    }
+    
+    currentFocus = -1;
+
+    autoList.setAttribute('id', inp.id + 'autocomplete-list');
+    autoList.classList.add('autocomplete-items');
+    inp.parentNode.appendChild(autoList);
+
+    for (let name of names) {
+        // TODO: rather than using innerHTML, maybe I should create and append new elements/nodes
+        let listItem = document.createElement('div');
+        listItem.innerHTML = "<strong>" + name.substr(0, typedVal.length) + "</strong>"; // Making matching text bold
+        listItem.innerHTML += name.substr(typedVal.length);
+
+        // insert an input field to hold the names item's value
+        listItem.innerHTML += "<input type='hidden' value='" + name + "'>";
+
+        listItem.addEventListener('click', function(e) {
+            let selectedName = this.getElementsByTagName('input')[0].value;
+            let selectedPerson = personsData.find((el) => el.name == selectedName);
+            inp.value = selectedName;
+            roleInput.value = selectedPerson.role;
+            traitsInput.value = selectedPerson.traits;
+
+            closeAllLists();
+        });
+
+        autoList.appendChild(listItem);
+    }
+
+
+    // Track key up/down/enter presses on the keyboard for navigating through autocomplete list
+    inp.addEventListener('keydown', function(e) {
+        let autoList = document.getElementById(this.id + 'autocomplete-list');
+        if (autoList) {
+            // Autolist should be the list of all persons instead of their container
+            autoList = autoList.getElementsByTagName('div');
+        }
+
+        if (e.keyCode == 40) {
+            // Down arrow
+            currentFocus++;
+            addActive(autoList);
+        } else if (e.keyCode == 38) {
+            // Up arrow
+            currentFocus--;
+            addActive(autoList);
+        } else if (e.keyCode == 13) {
+            // Enter key
+            e.preventDefault();
+            if (currentFocus > -1) {
+                if (autoList) {
+                    autoList[currentFocus].click();
+                }
+            }
+        }
+    });
+
+    function addActive(autoList) {
+        if (!autoList) {
+            return false;
+        }
+
+        // First remove all active persons
+        removeActive(autoList);
+
+        if (currentFocus >= autoList.length) {
+            currentFocus = 0;
+        } else if (currentFocus < 0) {
+            // Wrapping around when arrow up below first list item
+            currentFocus = autoList.length -1;
+        }
+
+        autoList[currentFocus].classList.add('autocomplete-active');
+    }
+
+    function removeActive(autoList) {
+        for (let person of autoList) {
+            person.classList.remove('autocomplete-active');
+        }
+    }
+
+    /* close all autocomplete lists in the document,
+    except the one passed as an argument: */ 
+    function closeAllLists(elem) {
+        let personsList = document.getElementsByClassName('autocomplete-items');
+
+        for (let person of personsList) {
+            if (elem != person && elem != inp) {
+                person.parentNode.removeChild(person);
+            }
+        }
+    }
+
+    document.addEventListener('click', (e) => {
+        closeAllLists(e.target);
+    })
 }

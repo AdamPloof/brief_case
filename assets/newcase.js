@@ -1,6 +1,12 @@
+// Twig Routing
+import Routing from '../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
+const routes = require('../public/js/fos_js_routes.json');
+Routing.setRoutingData(routes);
+
 document.addEventListener('DOMContentLoaded', function () {
     initAddOtherPersons();
     initRemoveOtherPersons();
+    loadPrimaryPersons();
 });
 
 function initAddOtherPersons() {
@@ -60,4 +66,37 @@ function removeFormFromCollection(subForm) {
         subForm.removeChild(subForm.lastChild);
     }
     subForm.remove();
+}
+
+// Watch the primary person input and fetch existing person that match input
+function loadPrimaryPersons() {
+    const primaryPersonInput = document.getElementById('case_primary_person_name');
+    let timeout = null;
+
+    primaryPersonInput.addEventListener('input', (e) => {
+        let name = e.target.value;
+        clearTimeout(timeout);
+
+        if (name.length > 2) {
+            timeout = setTimeout(() => {
+                fetchPrimaryPersons(name)
+                .then(data => {
+                    console.log(data);
+                });
+            }, 600);
+        }
+    });
+}
+
+async function fetchPrimaryPersons(personName = '') {
+    let url = Routing.generate('primary_persons', {name: personName});
+
+    let params = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const response = await fetch(url, params);
+    return response.json();
 }

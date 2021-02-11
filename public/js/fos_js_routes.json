@@ -1,0 +1,1 @@
+{"base_url":"","routes":{"primary_persons":{"tokens":[["variable","\/","[\\d\\w]+","name",true],["text","\/primary-persons"]],"defaults":[],"requirements":{"name":"[\\d\\w]+"},"hosttokens":[],"methods":[],"schemes":[]}},"prefix":"","host":"localhost","port":"","scheme":"http","locale":[]}

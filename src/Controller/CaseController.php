@@ -11,6 +11,7 @@ use App\Service\UploaderHelper;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -174,5 +175,26 @@ class CaseController extends AbstractController
         $context = array("message" => "Test Case Created! Case: " . $caseFile->getId());
 
         return ($this->render("cases/index.html.twig", $context));
+    }
+
+    /**
+     * @Route("/primary-persons/{name}", options={"expose"=true}, name="primary_persons", requirements={"name"="[\d\w]+"})
+     */
+    public function getPrimaryPersons(DocumentManager $dm, $name): Response {
+        // TODO: Switch up the requirements to be able to handle white space.
+        $name = new \MongoDB\BSON\Regex($name, 'i');
+        $persons = array();
+
+        $cases = $dm->createQueryBuilder(CaseFile::class)
+            ->field('primary_person.name')->equals($name)
+            ->sort('primary_person.name')
+            ->getQuery()
+            ->execute();
+
+        foreach ($cases as $caseFile) {
+            $persons[] = $caseFile->getPrimaryPerson();
+        }
+
+        return $this->json($persons);
     }
 }

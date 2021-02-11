@@ -5,7 +5,6 @@ import flatpickr from 'flatpickr';
 // CSS
 import './styles/app.scss';
 require("flatpickr/dist/themes/dark.css");
-
 require('bootstrap');
 
 $(document).ready(function() {

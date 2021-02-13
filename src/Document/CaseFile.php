@@ -28,6 +28,11 @@ class CaseFile
     /**
      * @MongoDB\Field(type="string")
      */
+    protected $category;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
     protected $summary;
 
     /**
@@ -66,6 +71,14 @@ class CaseFile
 
     public function setDescription(string $description): void {
         $this->description = $description;
+    }
+
+    public function getCategory(): ?string {
+        return $this->category;
+    }
+
+    public function setCategory(string $category): void {
+        $this->category = $category;
     }
 
     public function getSummary(): ?string {

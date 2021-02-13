@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,6 +25,18 @@ class CaseType extends AbstractType
             ->add('description', TextType::class)
             ->add('date', DateTimeType::class, [
                 'widget' => 'single_text'
+            ])
+            ->add('category', ChoiceType::class, [
+                'choices' => [
+                    'Shoplifting' => 'Shoplifting',
+                    'Aggressive Behavior' => 'Aggressive Behavior',
+                    'Harrasment' => 'Harrasment',
+                    'Workplace Injury' => 'Workplace Injury',
+                    'Foodborne Illness' => 'Foodborne Illness',
+                    'Vehicle Accident' => 'Vehicle Accident',
+                    'Vandalism' => 'Vandalism',
+                    'Medical Emergeny' => 'Medical Emergeny',
+                ]
             ])
             ->add('summary', TextareaType::class)
             ->add('video_file', FileType::class, [

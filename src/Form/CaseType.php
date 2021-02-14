@@ -63,6 +63,7 @@ class CaseType extends AbstractType
             ->add('submit', SubmitType::class, ['label' => 'Submit']);
     }
 
+    // Explicitly stating which class (Document) this form belongs to
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

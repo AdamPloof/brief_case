@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class UploaderHelper
 {
     const VIDEO_PATH = 'video';
+    const IMAGE_PATH = 'images';
+
     private $uploadsPath;
 
     // $uploadsPath is provided by a service parameter in services.yaml
@@ -23,6 +25,25 @@ class UploaderHelper
 
         try {
             $video->move(
+                $destination,
+                $newFileName
+            );
+        } catch (FileException $e) {
+            dd($e);
+        }
+
+        return $newFileName;
+    }
+
+    // Move uploaded image file to uploads dir
+    // Return the path to the public images uploads dir
+    public function uploadImageFile(UploadedFile $image): string {
+        $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+        $newFileName = uniqid() . '-' . $originalFilename . '.' . $image->guessExtension();
+        $destination = $this->uploadsPath . '/' . self::IMAGE_PATH;
+
+        try {
+            $image->move(
                 $destination,
                 $newFileName
             );

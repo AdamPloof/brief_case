@@ -4,6 +4,8 @@ namespace App\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
+use App\Service\UploaderHelper;
+
 /**
  * @MongoDB\EmbeddedDocument
  */
@@ -23,6 +25,11 @@ class Person
      * @MongoDB\Field(type="hash")
      */
     protected $traits = [];
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    protected $image;
 
     public function getName(): ?string {
         return $this->name;
@@ -51,4 +58,16 @@ class Person
     public function removeTrait(string $trait): void {
         unset($this->traits[$trait]);
     }
+
+    public function getImage(): ?string {
+        return $this->image;
+    }
+
+    public function setImage(string $image): void {
+        $this->image = $image;
+    }
+
+    public function getImagePath(): string {
+        return UploaderHelper::IMAGE_PATH . '/' . $this->getImage();
+    } 
 }

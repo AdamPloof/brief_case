@@ -105,9 +105,17 @@ class CaseController extends AbstractController
             /** @var UploadedFile $video */
             $video = $form->get('video_file')->getData();
 
+            /** @var UploadedFile $image */
+            $image = $form->get('image_file')->getData();
+
             if ($video) {
-                $newFileName = $uploaderHelper->uploadVideoFile($video);
-                $caseFile->setVideo($newFileName);
+                $newVideoFileName = $uploaderHelper->uploadVideoFile($video);
+                $caseFile->setVideo($newVideoFileName);
+            }
+
+            if ($image) {
+                $newImageFileName = $uploaderHelper->uploadimageFile($image);
+                $caseFile->setimage($newImageFileName);
             }
 
             $caseFile = $form->getData();
@@ -120,13 +128,42 @@ class CaseController extends AbstractController
         $context = [
             'form' => $form->createView(),
             'form_title' => 'Edit Case',
-            'video_filename' => $this->getOriginalVideoFilename($caseFile->getVideo())
+            'video_filename' => $this->getOriginalUploadFilename($caseFile->getVideo()),
+            'image_list' => $this->makePersonsImageList($caseFile),
         ];
 
         return $this->render("cases/editcase.html.twig", $context);
     }
 
-    private function getOriginalVideoFilename($videoFilename) {
+    // Collect a list of image filenames for each person in a case
+    // To be used when rendering the edit form for a case
+    private function makePersonsImageList($caseFile) {
+        $images = array();
+        $primary_person = $caseFile->getPrimaryPerson();
+        $primary_image = $this->getOriginalUploadFilename($caseFile->getPrimaryPerson()->getImage());
+
+        if ($primary_image) {
+            $images[$primary_person->getName()] = $primary_image;
+        } else {
+            $images[$primary_person->getName()] = null;
+        }
+
+        $additional_persons = $caseFile->getAssociatedPersons();
+        
+        foreach ($additional_persons as $person) {
+            $imageFilename = $this->getOriginalUploadFilename($person->getImage());
+
+            if ($imageFilename) {
+                $images[$person->getName()] = $imageFilename;
+            } else {
+                $images[$person->getName()] = null;
+            }
+        }
+
+        return $images;
+    }
+
+    private function getOriginalUploadFilename($videoFilename) {
         if (!isset($videoFilename)) {
             return null;
         }

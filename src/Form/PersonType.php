@@ -7,8 +7,10 @@ use App\Form\DataTransformer\TraitsToArrayTransformer;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Image;
 
 class PersonType extends AbstractType
 {
@@ -28,6 +30,15 @@ class PersonType extends AbstractType
             ->add('traits', TextType::class, [
                 'required' => false
                 // TODO: May eventually want to add an invalid message for incorrectly formed trait strings
+            ])
+            ->add('image_file', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new Image([
+                        'maxSize' => '2M',
+                    ]),
+                ]
             ]);
 
         $builder->get('traits')

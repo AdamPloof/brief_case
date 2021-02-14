@@ -1,6 +1,12 @@
 {% import _self as formMacros %}
 
-{% macro makePersonForm(personRow, gridForm = 0) %}
+{% macro makePersonForm(personRow, personImageFilename, gridForm = 0) %}
+    {% if personImageFilename is not null %}
+        {% set image_label = personImageFilename %}
+    {% else %}
+        {% set image_label = 'Select an image file...' %}
+    {% endif %}
+
     {% if gridForm == 1 %}
             <div class="card-header">
                 Additional Person
@@ -12,6 +18,15 @@
                     </div>
                     <div class="col">
                         {{ form_row(personRow.role) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form_row(personRow.image_file, {
+                            attr: {
+                                placeholder: image_label
+                            }
+                        }) }}
                     </div>
                 </div>
                 <div class="row">
@@ -35,6 +50,15 @@
                     </div>
                     <div class="col">
                         {{ form_row(personRow.role) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ form_row(personRow.image_file, {
+                            attr: {
+                                placeholder: image_label
+                            }
+                        }) }}
                     </div>
                 </div>
                 <div class="row">
@@ -73,7 +97,7 @@
             }
         }) }}
 
-        {{ formMacros.makePersonForm(form.primary_person) }}
+        {{ formMacros.makePersonForm(form.primary_person, image_list[form.primary_person.name.vars.value]) }}
 
         <div class="form-section-header">
             <div class="form-header-logo">
@@ -86,7 +110,7 @@
         <div id="assocPersonsContainer" class="associated-persons embed-form-grid" data-prototype="{{ formMacros.makePersonForm(form.associated_persons.vars.prototype, 1)|e('html_attr') }}">
             {% for assoc_person in form.associated_persons %}
                 <div class="person-form card card-grid">
-                    {{ formMacros.makePersonForm(assoc_person, 1) }}
+                    {{ formMacros.makePersonForm(assoc_person, image_list[assoc_person.name.vars.value], 1) }}
                 </div>
             {% endfor %}
         </div>

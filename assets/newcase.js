@@ -41,13 +41,12 @@ function initRemoveOtherPersons() {
 
 function addFormToCollection(collectionContainerClass) {
     let collectionContainer = document.getElementsByClassName(collectionContainerClass)[0];
-    let prototype = collectionContainer.dataset.prototype;
+    let newForm = collectionContainer.dataset.prototype;
     let index = parseInt(collectionContainer.dataset.index);
-    let newForm = prototype;
     
     newForm = newForm.replace(/__name__/g, index);
     collectionContainer.dataset.index = index + 1;
-    newFormContainer = document.createElement('div');
+    let newFormContainer = document.createElement('div');
     newFormContainer.classList.add('person-form', 'card', 'card-grid');
     newFormContainer.insertAdjacentHTML('beforeend', newForm);
 

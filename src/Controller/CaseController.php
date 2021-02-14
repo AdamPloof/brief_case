@@ -138,6 +138,7 @@ class CaseController extends AbstractController
             }
 
             // TODO: BUG FIX! When adding an image a new associted person is added with the only field entered being the image field
+            // This only seems to happen when editing existing cases.
             foreach ($form->get('associated_persons') as $assocPerson) {
 
                 /** @var UploadedFile $assocImage  */

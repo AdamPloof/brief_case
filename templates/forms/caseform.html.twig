@@ -114,8 +114,15 @@
                 <button id ="addPersonBtn" type="button" class="btn btn-info btn-sm add_person" data-collection-holder-class="associated-persons">Add Person</button>
             </div>
         </div>
-        <div id="assocPersonsContainer" class="associated-persons embed-form-grid" data-prototype="{{ formMacros.makePersonForm(form.associated_persons.vars.prototype, 1)|e('html_attr') }}">
+        <div id="assocPersonsContainer" class="associated-persons embed-form-grid" data-prototype="{{ formMacros.makePersonForm(form.associated_persons.vars.prototype, null, 1)|e('html_attr') }}">
             {% for assoc_person in form.associated_persons %}
+
+                {% if image_list is defined %}
+                    {% set assoc_person_image = image_list[assoc_person.name.vars.value] %}
+                {% else %}
+                    {% set assoc_person_image = null %}
+                {% endif %}
+
                 <div class="person-form card card-grid">
                     {{ formMacros.makePersonForm(assoc_person, image_list[assoc_person.name.vars.value], 1) }}
                 </div>

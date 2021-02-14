@@ -37,6 +37,7 @@ function checkSidebarHeight() {
     }
 }
 
+// TODO: Need to add this event listener to new inputs when added dynamically
 function initFileUploadInput() {
     const fileInputs = document.getElementsByClassName('custom-file-input');
 

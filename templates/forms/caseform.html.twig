@@ -97,7 +97,14 @@
             }
         }) }}
 
-        {{ formMacros.makePersonForm(form.primary_person, image_list[form.primary_person.name.vars.value]) }}
+        <!-- New Case forms will not have an image set for primary person -->
+        {% if image_list is defined %}
+            {% set primary_person_image = image_list[form.primary_person.name.vars.value] %}
+        {% else %}
+            {% set primary_person_image = null %}
+        {% endif %}
+
+        {{ formMacros.makePersonForm(form.primary_person, primary_person_image) }}
 
         <div class="form-section-header">
             <div class="form-header-logo">

@@ -69,11 +69,30 @@ class CaseController extends AbstractController
             /** @var UploadedFile $video */
             $video = $form->get('video_file')->getData();
 
+            /** @var UploadedFile $image */
+            $primary_image = $form->get('primary_person')->get('image_file')->getData();
+
             if ($video) {
-                $newFileName = $uploaderHelper->uploadVideoFile($video);
-                $caseFile->setVideo($newFileName);
+                $newVideoFileName = $uploaderHelper->uploadVideoFile($video);
+                $caseFile->setVideo($newVideoFileName);
             }
-            
+
+            if ($primary_image) {
+                $newImageFileName = $uploaderHelper->uploadImageFile($primary_image);
+                $caseFile->getPrimaryPerson()->setImage($newImageFileName);
+            }
+
+            foreach ($form->get('associated_persons') as $assocPerson) {
+
+                /** @var UploadedFile $assocImage  */
+                $assocImage = $assocPerson->get('image_file')->getData();
+
+                if ($assocImage) {
+                    $newAssocImageFileName = $uploaderHelper->uploadImageFile($assocImage);
+                    $caseFile->getAssociatedPersonByName($assocPerson->getData()->getName())->setImage($newAssocImageFileName);
+                }
+            }
+
             $caseFile = $form->getData();
             $dm->persist($caseFile);
             $dm->flush();
@@ -106,16 +125,28 @@ class CaseController extends AbstractController
             $video = $form->get('video_file')->getData();
 
             /** @var UploadedFile $image */
-            $image = $form->get('image_file')->getData();
+            $primary_image = $form->get('primary_person')->get('image_file')->getData();
 
             if ($video) {
                 $newVideoFileName = $uploaderHelper->uploadVideoFile($video);
                 $caseFile->setVideo($newVideoFileName);
             }
 
-            if ($image) {
-                $newImageFileName = $uploaderHelper->uploadimageFile($image);
-                $caseFile->setimage($newImageFileName);
+            if ($primary_image) {
+                $newImageFileName = $uploaderHelper->uploadImageFile($primary_image);
+                $caseFile->getPrimaryPerson()->setImage($newImageFileName);
+            }
+
+            // TODO: BUG FIX! When adding an image a new associted person is added with the only field entered being the image field
+            foreach ($form->get('associated_persons') as $assocPerson) {
+
+                /** @var UploadedFile $assocImage  */
+                $assocImage = $assocPerson->get('image_file')->getData();
+
+                if ($assocImage) {
+                    $newAssocImageFileName = $uploaderHelper->uploadImageFile($assocImage);
+                    $caseFile->getAssociatedPersonByName($assocPerson->getData()->getName())->setImage($newAssocImageFileName);
+                }
             }
 
             $caseFile = $form->getData();

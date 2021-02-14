@@ -132,4 +132,14 @@ class CaseFile
     public function getVideoPath() {
         return UploaderHelper::VIDEO_PATH . '/' . $this->getVideo();
     }
+
+    public function getAssociatedPersonByName($name) {
+        $persons = $this->getAssociatedPersons();
+        foreach ($persons as $person) {
+            if ($person->getName() == $name) {
+                return $person;
+            }
+        }
+        return null;
+    }
 }

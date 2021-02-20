@@ -21,6 +21,7 @@ class CaseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        // TODO: Handle empty traits inputs
         $builder
             ->add('description', TextType::class)
             ->add('date', DateTimeType::class, [

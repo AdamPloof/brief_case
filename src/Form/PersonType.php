@@ -32,6 +32,7 @@ class PersonType extends AbstractType
                 // TODO: May eventually want to add an invalid message for incorrectly formed trait strings
             ])
             ->add('image_file', FileType::class, [
+                'label' => 'Image',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [

@@ -47,7 +47,7 @@ class CaseFile
     protected $primary_person;
 
     /**
-     * @MongoDB\EmbedMany(targetDocument=Person::class)
+     * @MongoDB\EmbedMany(targetDocument=Person::class, strategy="set")
      * @Assert\Valid
      */
     protected $associated_persons;

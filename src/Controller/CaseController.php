@@ -7,6 +7,7 @@ use App\Document\Person;
 use App\Form\CaseType;
 
 use App\Service\UploaderHelper;
+use App\Service\CaseGenerator;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -262,5 +263,21 @@ class CaseController extends AbstractController
         }
 
         return $this->json($persons);
+    }
+
+    /**
+     * @Route("/generate", name="generate")
+     */
+    public function generateCases(Request $request, CaseGenerator $generator, DocumentManager $dm)
+    {
+        $context = array();
+
+        $newCase = $generator->generateCaseFile();
+        $dm->persist($caseFile);
+        $dm->flush();
+
+        $context[] = $newCase;
+
+        return $this->render("cases/generate.html.twig", $context);
     }
 }

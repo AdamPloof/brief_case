@@ -40,6 +40,14 @@ class CaseController extends AbstractController
     }
 
     /**
+     * @Route("/fetchcases", name="fetchcases")
+     */
+    public function fetchCaseFiles(Request $request, DocumentManager $dm) {
+        $cases = $dm->getRepository(CaseFile::class)->findAll();
+        return $this->json($cases);
+    }
+
+    /**
      * @Route("/case/{id}", name="viewcase", requirements={"id"="[\d\w]+"})
      */
     public function viewCaseFile(Request $request, DocumentManager $dm, $id)

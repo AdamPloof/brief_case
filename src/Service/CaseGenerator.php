@@ -16,14 +16,6 @@ use App\Document\Person;
  */
 class CaseGenerator
 {
-    protected $category;
-    protected $caseDate;
-
-    public function __construct($category, $caseDate) {
-        $this->category = $category;
-        $this->caseDate = $caseDate;
-    }
-
     // CaseFile Components
     private function makeDescription() {
         $titles = array(
@@ -93,7 +85,7 @@ class CaseGenerator
             "wellness product",
             "CBD"
         );
-        return array_rand($titles . ' - ' . array_rand($modifiers));
+        return $titles[array_rand($titles)]  . ' - ' . $modifiers[array_rand($modifiers)];
     }
 
     private function makeSummary() {
@@ -110,7 +102,7 @@ class CaseGenerator
             "602058ebb7bea-robo video.mp4",
             null,
         );
-        return array_rand($videos);
+        return $videos[array_rand($videos)];
     }
 
     // Person Components
@@ -213,7 +205,7 @@ class CaseGenerator
             "Abby Normal",
         );
 
-        return array_rand($names);
+        return $names[array_rand($names)];
     }
 
     private function makeRole() {
@@ -231,11 +223,11 @@ class CaseGenerator
             'Attorney',
             'Elephant Trainer',
         );
-        return array_rand($roles);
+        return $roles[array_rand($roles)];
     }
 
     private function makeTraits() {
-        $traits = array(
+        $allTraits = array(
             'disposition'=> 'sunny',
             'height'=> 'short',
             'hair'=> 'dark',
@@ -255,18 +247,15 @@ class CaseGenerator
             'laugh'=> 'guffaw',
             'musicality'=> 'atonal',
         );
-        $traitsNum = rand(3);
+        $traitsNum = rand(1, 3);
+        $traits = array();
 
-        $traitsStr = '';
-        for ($i = 0; $i < $traitsNum; $i++) {
-            $traitsStr .= array_rand($traits);
-            
-            if ($i != $traitsNum - 1) {
-                $traitsStr .= ',';
-            }
+        for ($i = 0; $i < $traitsNum + 1; $i++) {
+            $k = array_rand($allTraits);
+            $traits[$k] = $allTraits[$k]; 
         }
 
-        return $traitsStr;
+        return $traits;
     }
 
     private function getImage() {
@@ -276,7 +265,7 @@ class CaseGenerator
             '602893a050168-homer-mugshot.png',
             null,
         );
-        return array_rand($images);
+        return $images[array_rand($images)];
     }
 
     public function generatePerson() {
@@ -295,13 +284,13 @@ class CaseGenerator
     }
 
     // Master Assembler
-    public function generateCaseFile() {
+    public function generateCaseFile($category, $caseDate) {
         $caseFile = new CaseFile();
         $video = $this->getVideo();
 
         $caseFile->setDescription($this->makeDescription());
-        $caseFile->setDate($this->caseDate);
-        $caseFile->setCategory($this->category);
+        $caseFile->setCategory($category);
+        $caseFile->setDate($caseDate);
         $caseFile->setSummary($this->makeSummary());
 
         if ($video) {
@@ -314,7 +303,7 @@ class CaseGenerator
         $assocPersonNumber = rand(1, 2);
 
         for ($i = 0; $i < $assocPersonNumber; $i++) {
-            $assocPerson = $this->generatePerson;
+            $assocPerson = $this->generatePerson();
             $caseFile->addAssociatedPerson($assocPerson);
         }
 

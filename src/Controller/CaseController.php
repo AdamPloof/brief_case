@@ -318,7 +318,7 @@ class CaseController extends AbstractController
 
             $newCase = $generator->generateCaseFile($category, $caseDate);
             $dm->persist($newCase);
-            $cases[] = $newcase;
+            $cases[] = $newCase;
 
             if ($i % $batchSize == 0) {
                 $dm->flush();
@@ -326,7 +326,8 @@ class CaseController extends AbstractController
         }
 
         $dm->flush();
-
-        return $this->render("cases/generate.html.twig", $cases);
+        
+        $context = ['cases' => $cases];
+        return $this->render("cases/generate.html.twig", $context);
     }
 }

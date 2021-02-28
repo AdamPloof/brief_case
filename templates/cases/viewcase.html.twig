@@ -4,19 +4,24 @@
 
 {% macro makePersonContainer(person, personType) %}
     <div class="person-container">
-        <div class="person-name">
-            <h5>{{ person.name }}</h5>
+        <div class="person-info">
+            <div class="person-name">
+                <h5>{{ person.name }}</h5>
+            </div>
+            <div class="person-role">
+                <strong>Role: </strong>{{ person.role }}
+            </div>
+            {% if person.traits %}
+                {% for trait, val in person.traits %}
+                    <div class="trait-row">
+                        <strong>{{ trait }}:&nbsp;</strong> {{ val }}
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
-        <div class="person-role">
-            <strong>Role: </strong>{{ person.role }}
+        <div class="person-image">
+            <img src="{{ uploaded_asset(person.imagePath) }}" alt="" />
         </div>
-        {% if person.traits %}
-            {% for trait, val in person.traits %}
-                <div class="trait-row">
-                    <strong>{{ trait }}:&nbsp;</strong> {{ val }}
-                </div>
-            {% endfor %}
-        {% endif %}
     </div>
 {% endmacro makePersonContainer %}
 
@@ -42,7 +47,7 @@
                 <h4>Summary</h4>
             </div>
             <div class="summary-body">
-                <p>{{ case.summary }}</p>
+                <p>{{ case.summary|raw }}</p>
             </div>
         </div>
 

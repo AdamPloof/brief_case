@@ -70,12 +70,29 @@
 
         .summary {
             flex-direction: column;
-        }
 
+            .summary-body {
+                h1, h2, h3, h4, h5 {
+                    font-size: larger;
+                    color: $primary-darker;
+                    margin-top: 1rem;
+                }
+            }
+        }
     }
 
     .person-container {
-        flex-direction: column;
+        flex-direction: row;
+
+        .person-info {
+            flex-direction: column;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .person-image {
+            margin-left: 6rem;
+        }
 
         .trait-row {
             flex-direction: row;

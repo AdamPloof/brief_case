@@ -280,8 +280,8 @@ class CaseController extends AbstractController
          * 5% everything else except
          */
 
+        $cases = array();
         $generator = new CaseGenerator();
-        $seedDate = new \Datetime('2021-01-12');
         $batchSize = 20;
 
         for ($i = 0; $i < 100; $i++) {
@@ -311,19 +311,15 @@ class CaseController extends AbstractController
                     $category = 'Vandalism';
                     break;
             }
-            $dateAdd = rand(-2, 2);
 
-            if ($dateAdd < 0) {
-                $seedDate->sub(new \DateInterval('P' . abs($dateAdd) . 'D'));
-            } elseif ($dateAdd == 0) {
-                $seedDate->add(new \DateInterval('P1D'));
-            } else {
-                $seedDate->add(new \DateInterval('P' . $dateAdd . 'D'));
-            }
+            $dateAdd = strval(rand(0, 90));
+            $caseDate = new \Datetime('2021-01-12');
+            $caseDate->add(new \DateInterval('P' . $dateAdd . 'D'));
 
-            $caseDate = clone $seedDate;
             $newCase = $generator->generateCaseFile($category, $caseDate);
-            $dm->persist($caseFile);
+            $dm->persist($newCase);
+            $cases[] = $newcase;
+
             if ($i % $batchSize == 0) {
                 $dm->flush();
             }
@@ -331,9 +327,6 @@ class CaseController extends AbstractController
 
         $dm->flush();
 
-        $context = array();
-        $context[] = $newCase;
-
-        return $this->render("cases/generate.html.twig", $context);
+        return $this->render("cases/generate.html.twig", $cases);
     }
 }

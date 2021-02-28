@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>Generated Cases!</h1>
+
+<ul>
+    {% for case in cases %}
+        <li>
+            <a href="{{ path('viewcase', {id: case.id}) }}">{{ case.description }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock body %}

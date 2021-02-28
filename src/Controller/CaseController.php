@@ -268,14 +268,70 @@ class CaseController extends AbstractController
     /**
      * @Route("/generate", name="generate")
      */
-    public function generateCases(Request $request, CaseGenerator $generator, DocumentManager $dm)
+    public function generateCases(Request $request, DocumentManager $dm)
     {
-        $context = array();
+        /**
+         * Generates dummy case files using a set of random names, ipsum content, choice of images and video.
+         * Create 100 dummy cases
+         * 50% shoplifting
+         * 10% workplace injury
+         * 10% vehicle accident
+         * 10% aggressive behavior
+         * 5% everything else except
+         */
 
-        $newCase = $generator->generateCaseFile();
-        $dm->persist($caseFile);
+        $generator = new CaseGenerator();
+        $seedDate = new \Datetime('2021-01-12');
+        $batchSize = 20;
+
+        for ($i = 0; $i < 100; $i++) {
+            switch ($i) {
+                case 0:
+                    $category = 'Shoplifting';
+                    break;
+                case 50:
+                    $category = 'Workplace Injury';
+                    break;
+                case 60:
+                    $category = 'Vehicle Accident';
+                    break;
+                case 70:
+                    $category = 'Aggressive Behavior';
+                    break;
+                case 80:
+                    $category = 'Harrasment';
+                    break;
+                case 85:
+                    $category = 'Foodborne Illness';
+                    break;
+                case 90:
+                    $category = 'Medical Emergency';
+                    break;
+                case 95:
+                    $category = 'Vandalism';
+                    break;
+            }
+            $dateAdd = rand(-2, 2);
+
+            if ($dateAdd < 0) {
+                $seedDate->sub(new \DateInterval('P' . abs($dateAdd) . 'D'));
+            } elseif ($dateAdd == 0) {
+                $seedDate->add(new \DateInterval('P1D'));
+            } else {
+                $seedDate->add(new \DateInterval('P' . $dateAdd . 'D'));
+            }
+
+            $caseDate = clone $seedDate;
+            $newCase = $generator->generateCaseFile($category, $caseDate);
+            $dm->persist($caseFile);
+            if ($i % $batchSize == 0) {
+                $dm->flush();
+            }
+        }
+
         $dm->flush();
 
+        $context = array();
         $context[] = $newCase;
 
         return $this->render("cases/generate.html.twig", $context);

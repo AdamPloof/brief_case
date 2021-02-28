@@ -36,7 +36,7 @@ class CaseType extends AbstractType
                     'Foodborne Illness' => 'Foodborne Illness',
                     'Vehicle Accident' => 'Vehicle Accident',
                     'Vandalism' => 'Vandalism',
-                    'Medical Emergeny' => 'Medical Emergeny',
+                    'Medical Emergeny' => 'Medical Emergency',
                 ]
             ])
             ->add('summary', TextareaType::class)

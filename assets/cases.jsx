@@ -1,4 +1,3 @@
-import { isRuntimeEnvironmentConfigured } from '@symfony/webpack-encore';
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
 

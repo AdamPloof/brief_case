@@ -70,7 +70,7 @@
         "version": "3.0.1"
     },
     "doctrine/mongodb-odm": {
-        "version": "2.1.2"
+        "version": "2.2.0"
     },
     "doctrine/mongodb-odm-bundle": {
         "version": "3.3",
@@ -117,7 +117,7 @@
         ]
     },
     "jean85/pretty-package-versions": {
-        "version": "1.5.1"
+        "version": "1.6.0"
     },
     "laminas/laminas-code": {
         "version": "3.4.1"
@@ -414,6 +414,9 @@
     },
     "symfony/property-info": {
         "version": "v5.1.8"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.2.3"
     },
     "symfony/routing": {
         "version": "5.1",

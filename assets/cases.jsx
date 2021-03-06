@@ -11,12 +11,27 @@ class CasesTable extends Component {
         super(props);
         this.state = {
             cases: [],
-            page: 1, 
+            page: 1,
+            pages: 1, 
         }
     }
 
     componentDidMount() {
         this.getCases();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        let pages = 1;
+        if (this.state.cases != prevState.cases) {
+            pages = this.state.cases.length / 15;
+            // Checking if whole number, if not adding one page for remainder
+            if (pages % 1 != 0) {
+                pages = Math.ceil(pages);      
+            }
+            this.setState({
+                pages
+            });
+        }
     }
 
     getCases() {

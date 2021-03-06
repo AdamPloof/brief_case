@@ -9,9 +9,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use App\Service\UploaderHelper;
 use App\Document\Person;
+use App\Repository\CaseFileRepository;
 
 /**
- * @MongoDB\Document(db="BriefCase", collection="cases_tab")
+ * @MongoDB\Document(db="BriefCase", collection="cases_tab", repositoryClass=CaseFileRepository::class)
  */
 class CaseFile
 {

@@ -106,13 +106,6 @@ async function fetchPrimaryPersons(personName = '') {
 function autocompletePersonInput(inp, personsData) {
     let currentFocus;
     let names = [];
-    let persons = [
-        {name: 'Johan', role: 'shoplifter', traits: {hieght: 'tall', hair: 'dark'}}, 
-        {name: 'Susanna', role: 'shoplifter', traits: {hieght: 'tall', hair: 'dark'}}, 
-        {name: 'Maria', role: 'shoplifter', traits: {hieght: 'tall', hair: 'dark'}}, 
-        {name: 'Michelangelo', role: 'shoplifter', traits: {hieght: 'tall', hair: 'dark'}}
-    ];
-    personsData.push(...persons)
 
     const roleInput = document.getElementById('case_primary_person_role');
     const traitsInput = document.getElementById('case_primary_person_traits');

@@ -2,12 +2,13 @@
 
 {% block body %}
     <h1>Cases</h1>
-    <div id="cases-table">
-        <!-- React CasesTable component goes here -->
-    </div>
+
     {% if message is defined %}
         <p>{{ message }}</p>
     {% endif %}
+    <div id="cases-table">
+        <!-- React CasesTable component goes here -->
+    </div>
     {% if cases %}
         <ul>
             {% for case in cases %}
@@ -21,5 +22,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {# {{ encore_entry_script_tags('cases') }} #}
+    {{ encore_entry_script_tags('cases') }}
 {% endblock javascripts %}

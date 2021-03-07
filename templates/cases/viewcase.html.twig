@@ -32,13 +32,20 @@
 {% block body %}
 <div class="case-container">
     <div class="case-header">
-        <div class="header-logo">
-            <h2>{{ case.description }}</h2>
+        <div class="header-right">
+            <div class="header-logo">
+                <h2>{{ case.description }}</h2>
+            </div>
+            <div class="header-info">
+                <small class="text-soft">
+                    {{ case.date|date("F j, Y - g:ia") }}
+                </small>
+            </div>
         </div>
-        <div class="header-info">
-            <small class="text-soft">
-                {{ case.date|date("F j, Y - g:ia") }}
-            </small>
+        <div class="header-left">
+            <div class="header-options">
+                <a href="{{ path('editcase', {id: case.id}) }}" class="btn btn-info">Edit Case</a>
+            </div>
         </div>
     </div>
     <div class="case-body">

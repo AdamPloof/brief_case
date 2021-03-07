@@ -29,6 +29,11 @@
         color: $grey-lightest;
         padding: 1.5rem;
 
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
         .header-info {
             margin-top: auto;
             margin-bottom: auto;

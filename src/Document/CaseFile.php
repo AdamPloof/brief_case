@@ -58,6 +58,16 @@ class CaseFile
      */
     protected $video;
 
+    /**
+     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="setArray", mappedBy="related_cases")
+     */
+    public $casesRelatedWithThis;
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="setArray", inversedBy="casesRelatedWithThis")
+     */
+    public $related_cases;
+
     public function __construct() {
         $this->associated_persons = new ArrayCollection();
     }
@@ -118,6 +128,23 @@ class CaseFile
         foreach ($this->associated_persons as $key => $person) {
             if ($person == $associatedPerson) {
                 unset($this->associated_persons[$key]);
+            }
+        }
+    }
+
+    public function getRelatedCases(): Collection {
+        return $this->related_cases;
+    }
+
+    public function addRelatedCase(CaseFile $relatedCase): void {
+        $relatedCase->casesRelatedWithThis[] = $this;
+        $this->related_cases[] = $relatedCase;
+    }
+
+    public function removeRelatedCase(CaseFile $relatedCase) {
+        foreach ($this->related_cases as $key => $caseId) {
+            if ($caseId == $relatedCase->getId()) {
+                unset($this->related_cases[$key]);
             }
         }
     }

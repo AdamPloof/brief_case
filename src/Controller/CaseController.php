@@ -48,7 +48,7 @@ class CaseController extends AbstractController
     }
 
     /**
-     * @Route("/case/{id}", name="viewcase", requirements={"id"="[\d\w]+"})
+     * @Route("/case/{id}", name="viewcase", requirements={"id"="[\d\w]+"}, options={"expose"=true})
      */
     public function viewCaseFile(Request $request, DocumentManager $dm, $id)
     {

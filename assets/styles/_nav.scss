@@ -32,6 +32,10 @@
     background-color: $grey-darkest;
     padding: 1.5rem;
 
+    .sidebar-section {
+        margin-top: 1.75rem;
+    }
+
     li {
         text-decoration: none;
         margin: .6rem 0;
@@ -44,6 +48,13 @@
             text-decoration: none;
             color: $grey-lightest;
         }
+    }
+
+    .sidebar-heading {
+        font-size: large;
+        font-weight: 600;
+        padding-left: 40px;
+        color: $grey-lightest;
     }
 }
 

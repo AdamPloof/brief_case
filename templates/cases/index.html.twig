@@ -1,15 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Cases</h1>
-
     {% if message is defined %}
         <p>{{ message }}</p>
     {% endif %}
-    <div id="cases-table">
+    <div id="index-container">
         <!-- React CasesTable component goes here -->
     </div>
-    {% if cases %}
+    {#{% if cases %}
         <ul>
             {% for case in cases %}
                 <li>
@@ -17,7 +15,7 @@
                 </li>
             {% endfor %}
         </ul>
-    {% endif %}
+    {% endif %}#}
 {% endblock body %}
 
 {% block javascripts %}

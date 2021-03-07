@@ -1,0 +1,26 @@
+@import "variables";
+
+.pager {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.cases-pager-list {
+   li {
+       list-style: none;
+       display: inline;
+       margin: 0 .7rem;
+
+       a {
+           &.disabled {
+                cursor: default;
+                color: $grey-dark;
+           }
+
+           &:hover {
+               text-decoration: none;
+           }
+       }
+   } 
+}

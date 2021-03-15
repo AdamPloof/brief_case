@@ -70,6 +70,8 @@ class CaseFile
 
     public function __construct() {
         $this->associated_persons = new ArrayCollection();
+        $this->related_cases = new ArrayCollection();
+        $this->casesRelatedWithThis = new ArrayCollection();
     }
 
     public function getId(): ?string {

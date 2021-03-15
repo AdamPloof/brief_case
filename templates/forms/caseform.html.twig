@@ -129,5 +129,13 @@
             {% endfor %}
         </div>
 
+        <div class="related-cases-container">
+            {% for related_case in form.related_cases %}
+                <div class="related-case-input">
+                    {{ form_row(related_case.description) }}
+                </div>
+            {% endfor %}
+        </div>
+
     {{ form_end(form) }}
 </div>

@@ -61,6 +61,14 @@ class CaseType extends AbstractType
                 'label' => false,
                 'by_reference' => false,
             ])
+            ->add('related_cases', CollectionType::class, [
+                'entry_type' => RelatedCaseType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+                'label' => false,
+                'by_reference' => false,
+            ])
             ->add('submit', SubmitType::class, ['label' => 'Submit']);
     }
 

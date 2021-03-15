@@ -129,7 +129,7 @@
             {% endfor %}
         </div>
 
-        <div class="related-cases-container">
+        <div class="related-cases-container" data-prototype="{{ form_widget(form.related_cases.vars.prototype)|e('html_attr') }}">
             {% for related_case in form.related_cases %}
                 <div class="related-case-input">
                     {{ form_row(related_case.description) }}

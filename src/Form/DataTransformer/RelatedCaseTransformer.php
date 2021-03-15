@@ -14,8 +14,8 @@ class RelatedCaseTransformer implements DataTransformerInterface
      * 
      * @param CaseFile|null $caseFile, 
      */
-    public function transform($caseFile): string {
-        return $caseFile->getId();
+    public function transform($caseFile): ?string {
+        return $caseFile ? $caseFile->getId() : null;
     }
 
     /**

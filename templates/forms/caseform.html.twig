@@ -1,5 +1,6 @@
 {% import _self as formMacros %}
 
+<!-- Person Macro -->
 {% macro makePersonForm(personRow, personImageFilename, gridForm = 0) %}
     {% if personImageFilename is not null %}
         {% set image_label = personImageFilename %}
@@ -71,6 +72,16 @@
     {% endif %}
 {% endmacro makePersonForm %}
 
+<!-- Related Case Macro -->
+{% macro makeRelatedCaseForm(relatedCase) %}
+    <div class="related-case-card">
+        <div class="card-input">
+            {{ form_row(relatedCase.description) }}
+        </div>
+        {{ form_row(relatedCase.id) }}
+    </div>
+{% endmacro makeRelatedCaseForm %}
+
 {% if video_filename is defined and video_filename is not null %}
     {% set video_label = video_filename %}
 {% else %}
@@ -106,6 +117,7 @@
 
         {{ formMacros.makePersonForm(form.primary_person, primary_person_image) }}
 
+        <!-- Associated Persons Section -->
         <div class="form-section-header">
             <div class="form-header-logo">
                 <h3>Others Involved</h3>
@@ -129,11 +141,19 @@
             {% endfor %}
         </div>
 
+        <!-- Related Cases Section -->
+        <div class="form-section-header">
+            <div class="form-header-logo">
+                <h3>Related Cases</h3>
+            </div>
+            <div class="form-header-options">
+                <button id ="addCaseBtn" type="button" class="btn btn-info btn-sm add_case" data-collection-holder-class="related-cases">Add Case</button>
+            </div>
+        </div>
+
         <div class="related-cases-container" data-prototype="{{ form_widget(form.related_cases.vars.prototype)|e('html_attr') }}">
             {% for related_case in form.related_cases %}
-                <div class="related-case-input">
-                    {{ form_row(related_case.description) }}
-                </div>
+                {{ formMacros.makeRelatedCaseForm(related_case) }}
             {% endfor %}
         </div>
 

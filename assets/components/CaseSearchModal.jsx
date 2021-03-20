@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 
+import CasesTable from './CasesTable';
+
 class CaseSearchModal extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            page: 1,
+        };
+    }
 
     render() { 
         return (
             <div className="modal fade" id="caseSearchModal" tabIndex="-1" aria-labelledby="caseSearchModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
+                <div className="modal-dialog" style={{maxWidth: "750px"}}>
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="caseSearchModalLabel">Select Related Case</h5>
@@ -15,7 +23,7 @@ class CaseSearchModal extends Component {
                             </button>
                         </div>
                         <div className="modal-body">
-                            ...
+                            <CasesTable cases={this.props.cases} />
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>

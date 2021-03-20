@@ -25,7 +25,8 @@ class RelatedCaseType extends AbstractType
                 'mapped' => false,
             ])
             ->add('id', TextType::class, [
-                'attr' => ['hidden' => true]
+                'attr' => ['hidden' => true],
+                'label' => false
             ]);
 
         $builder->get('id')

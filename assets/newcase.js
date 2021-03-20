@@ -5,7 +5,8 @@ Routing.setRoutingData(routes);
 
 document.addEventListener('DOMContentLoaded', function () {
     initAddOtherPersons();
-    initRemoveOtherPersons();
+    initAddRelatedCases();
+    initRemoveEmbedForms();
     loadPrimaryPersons();
 });
 
@@ -20,11 +21,12 @@ function initAddOtherPersons() {
         // Pass a unique index to the embedded form creator
         // Number for inputs + 1 seems like a good idea
         let collectionContainerClass = e.target.dataset.collectionHolderClass;
-        addFormToCollection(collectionContainerClass);
+        addFormToCollection(collectionContainerClass, 'embed-person-form');
     });
 }
 
-function initRemoveOtherPersons() {
+// TODO: Make this work for both other persons and related cases
+function initRemoveEmbedForms() {
     let removeBtns = document.getElementsByClassName('remove-case-btn');
 
     if (removeBtns.length == 0) {
@@ -33,13 +35,18 @@ function initRemoveOtherPersons() {
 
     for (let btn of removeBtns) {
         btn.addEventListener('click', (e) => {
+            // Remove btn could refer belong to an associated person form or a related case form
+            // Check if it belongs to an associated person first and if not, assume it's a related case
             let subForm = e.target.closest('.embed-person-form.card.card-grid');
+            if (!subForm) {
+                subForm = e.target.closest('.embed-case-form.card.card-grid');
+            }
             removeFormFromCollection(subForm);
         })
     }
 }
 
-function addFormToCollection(collectionContainerClass) {
+function addFormToCollection(collectionContainerClass, formClass) {
     let collectionContainer = document.getElementsByClassName(collectionContainerClass)[0];
     let newForm = collectionContainer.dataset.prototype;
     let index = parseInt(collectionContainer.dataset.index);
@@ -47,7 +54,7 @@ function addFormToCollection(collectionContainerClass) {
     newForm = newForm.replace(/__name__/g, index);
     collectionContainer.dataset.index = index + 1;
     let newFormContainer = document.createElement('div');
-    newFormContainer.classList.add('embed-person-form', 'card', 'card-grid');
+    newFormContainer.classList.add(formClass, 'card', 'card-grid');
     newFormContainer.insertAdjacentHTML('beforeend', newForm);
 
     collectionContainer.appendChild(newFormContainer);
@@ -55,7 +62,7 @@ function addFormToCollection(collectionContainerClass) {
     // Add even listener to remove btn
     let removeBtn = newFormContainer.querySelector('.remove-case-btn');
     removeBtn.addEventListener('click', (e) => {
-        let subForm = e.target.closest('.embed-person-form.card.card-grid');
+        let subForm = e.target.closest('.' + formClass + '.card.card-grid');
         removeFormFromCollection(subForm);
     })
 }
@@ -78,7 +85,7 @@ function initAddRelatedCases() {
     addCaseBtn.addEventListener('click', (e) => {
         // Pass a unique index to the embedded form creator
         let collectionContainerClass = e.target.dataset.collectionHolderClass;
-        addFormToCollection(collectionContainerClass);
+        addFormToCollection(collectionContainerClass, 'embed-case-form');
     });
 }
 

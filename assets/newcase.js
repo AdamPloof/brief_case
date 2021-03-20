@@ -14,7 +14,7 @@ function initAddOtherPersons() {
     const addPersonBtn = document.getElementById("addPersonBtn");
 
     let assocPersonsContainer = document.getElementById("assocPersonsContainer");
-    assocPersonsContainer.dataset.index = assocPersonsContainer.getElementsByTagName('li').length + 1;
+    assocPersonsContainer.dataset.index = assocPersonsContainer.querySelectorAll('.person-form,.card,.card-grid').length;
 
     addPersonBtn.addEventListener('click', (e) => {
         // Pass a unique index to the embedded form creator

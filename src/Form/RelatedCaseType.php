@@ -23,6 +23,9 @@ class RelatedCaseType extends AbstractType
         $builder
             ->add('description', TextType::class, [
                 'mapped' => false,
+                'attr' => [
+                    'placeholder' => "Search cases...",
+                ]
             ])
             ->add('id', TextType::class, [
                 'attr' => ['hidden' => true],

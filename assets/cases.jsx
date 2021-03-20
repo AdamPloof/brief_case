@@ -16,7 +16,7 @@ class CasesTable extends Component {
             page: 1,
             pages: 1,
             casesPerPage: 10,
-        }
+        };
         this.changePage = this.changePage.bind(this);
     }
 

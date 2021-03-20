@@ -3,9 +3,15 @@ import Routing from '../vendor/friendsofsymfony/jsrouting-bundle/Resources/publi
 const routes = require('../public/js/fos_js_routes.json');
 Routing.setRoutingData(routes);
 
+import $ from 'jquery';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import CaseSearch from './CaseSearch';
+
 document.addEventListener('DOMContentLoaded', function () {
     initAddOtherPersons();
     initAddRelatedCases();
+    initRelatedCaseInputs();
     initRemoveEmbedForms();
     loadPrimaryPersons();
 });
@@ -59,6 +65,11 @@ function addFormToCollection(collectionContainerClass, formClass) {
 
     collectionContainer.appendChild(newFormContainer);
 
+    // Add case search modal trigger to input on embedded case forms
+    if (formClass = 'embed-case-form') {
+        setCaseSearchModalListener(newFormContainer.getElementsByTagName('input')[0]);
+    }
+
     // Add even listener to remove btn
     let removeBtn = newFormContainer.querySelector('.remove-case-btn');
     removeBtn.addEventListener('click', (e) => {
@@ -86,6 +97,25 @@ function initAddRelatedCases() {
         // Pass a unique index to the embedded form creator
         let collectionContainerClass = e.target.dataset.collectionHolderClass;
         addFormToCollection(collectionContainerClass, 'embed-case-form');
+    });
+}
+
+// Add event listeners to existing related case inputs to trigger case search modal
+function initRelatedCaseInputs() {
+    const embedCaseForms = document.getElementsByClassName('embed-case-form');
+    for (let caseForm of embedCaseForms) {
+        let caseInput = caseForm.getElementsByTagName('input')[0];
+        setCaseSearchModalListener(caseInput);
+    }
+}
+
+// Init event listeners for related case inputs
+function setCaseSearchModalListener(trigEl) {
+    trigEl.addEventListener('click', (e) => {
+        let inputId = e.target.id;
+        const searchModal = $('#caseSearchModal');
+        searchModal.data('selected_input', inputId);
+        searchModal.modal('show');
     });
 }
 
@@ -255,3 +285,6 @@ function transformTraitsToStr(traits) {
 
     return traitsStr;
 }
+
+// Load CaseSearch Modal (React component)
+ReactDOM.render(<CaseSearch />, document.getElementById('case-search-container'));

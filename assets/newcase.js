@@ -14,7 +14,7 @@ function initAddOtherPersons() {
     const addPersonBtn = document.getElementById("addPersonBtn");
 
     let assocPersonsContainer = document.getElementById("assocPersonsContainer");
-    assocPersonsContainer.dataset.index = assocPersonsContainer.querySelectorAll('.person-form,.card,.card-grid').length;
+    assocPersonsContainer.dataset.index = assocPersonsContainer.querySelectorAll('.embed-person-form,.card,.card-grid').length;
 
     addPersonBtn.addEventListener('click', (e) => {
         // Pass a unique index to the embedded form creator
@@ -33,7 +33,7 @@ function initRemoveOtherPersons() {
 
     for (let btn of removeBtns) {
         btn.addEventListener('click', (e) => {
-            let subForm = e.target.closest('.person-form.card.card-grid');
+            let subForm = e.target.closest('.embed-person-form.card.card-grid');
             removeFormFromCollection(subForm);
         })
     }
@@ -47,7 +47,7 @@ function addFormToCollection(collectionContainerClass) {
     newForm = newForm.replace(/__name__/g, index);
     collectionContainer.dataset.index = index + 1;
     let newFormContainer = document.createElement('div');
-    newFormContainer.classList.add('person-form', 'card', 'card-grid');
+    newFormContainer.classList.add('embed-person-form', 'card', 'card-grid');
     newFormContainer.insertAdjacentHTML('beforeend', newForm);
 
     collectionContainer.appendChild(newFormContainer);
@@ -55,7 +55,7 @@ function addFormToCollection(collectionContainerClass) {
     // Add even listener to remove btn
     let removeBtn = newFormContainer.querySelector('.remove-case-btn');
     removeBtn.addEventListener('click', (e) => {
-        let subForm = e.target.closest('.person-form.card.card-grid');
+        let subForm = e.target.closest('.embed-person-form.card.card-grid');
         removeFormFromCollection(subForm);
     })
 }
@@ -65,6 +65,21 @@ function removeFormFromCollection(subForm) {
         subForm.removeChild(subForm.lastChild);
     }
     subForm.remove();
+}
+
+// *** Related Cases Embed Form ***
+function initAddRelatedCases() {
+    // Add event listener to add cases button to add new embedded cases forms in new case view
+    const addCaseBtn = document.getElementById("addCaseBtn");
+
+    let relatedCasesContainer = document.getElementById("relatedCasesContainer");
+    relatedCasesContainer.dataset.index = relatedCasesContainer.querySelectorAll('.embed-case-form,.card,.card-grid').length;
+
+    addCaseBtn.addEventListener('click', (e) => {
+        // Pass a unique index to the embedded form creator
+        let collectionContainerClass = e.target.dataset.collectionHolderClass;
+        addFormToCollection(collectionContainerClass);
+    });
 }
 
 // Watch the primary person input and fetch existing person that match input

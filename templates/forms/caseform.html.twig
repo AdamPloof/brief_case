@@ -74,7 +74,7 @@
 
 <!-- Related Case Macro -->
 {% macro makeRelatedCaseForm(relatedCase) %}
-    <div class="embed-input-card card card-grid">
+    <div class="embed-case-form card card-grid">
         <div class="card-header">
             Related Case
         </div>
@@ -145,7 +145,7 @@
                     {% set assoc_person_image = null %}
                 {% endif %}
 
-                <div class="person-form card card-grid">
+                <div class="embed-person-form card card-grid">
                     {{ formMacros.makePersonForm(assoc_person, image_list[assoc_person.name.vars.value], 1) }}
                 </div>
             {% endfor %}
@@ -161,11 +161,11 @@
             </div>
         </div>
 
-        <div class="related-cases-container embed-form-grid" data-prototype="{{ form_widget(form.related_cases.vars.prototype)|e('html_attr') }}">
+        <div id="relatedCasesContainer" class="related-cases embed-form-grid" data-prototype="{{ form_widget(form.related_cases.vars.prototype)|e('html_attr') }}">
             {% for related_case in form.related_cases %}
                 {{ formMacros.makeRelatedCaseForm(related_case) }}
             {% endfor %}
-            <div class="embed-input-card card card-grid">
+            <div class="embed-case-form card card-grid">
                 <div class="card-header">
                     Related Case
                 </div>

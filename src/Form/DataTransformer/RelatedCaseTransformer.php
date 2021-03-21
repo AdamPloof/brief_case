@@ -3,12 +3,18 @@
 namespace App\Form\DataTransformer;
 
 use App\Document\CaseFile;
-use App\Repository\CaseFileRepository;
+use Doctrine\ODM\MongoDB\DocumentManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class RelatedCaseTransformer implements DataTransformerInterface
 {
+    private $dm;
+
+    public function __construct(DocumentManager $dm) {
+        $this->dm = $dm;
+    }
+    
     /**
      * Retrieve the id for a given CaseFile
      * 
@@ -25,7 +31,6 @@ class RelatedCaseTransformer implements DataTransformerInterface
      * @throws TransformationFailedException if can't find case for id
      */
     public function reverseTransform($caseId): ?CaseFile {
-        $repo = new CaseFileRepository();
-        return $repo->find($caseId);
+        return $this->dm->getRepository(CaseFile::class)->find($caseId);
     }
 }

@@ -4,13 +4,6 @@ import $ from 'jquery';
 import CasesTable from './CasesTable';
 
 class CaseSearchModal extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            page: 1,
-        };
-    }
-
     render() { 
         return (
             <div className="modal fade" id="caseSearchModal" tabIndex="-1" aria-labelledby="caseSearchModalLabel" aria-hidden="true">
@@ -23,7 +16,10 @@ class CaseSearchModal extends Component {
                             </button>
                         </div>
                         <div className="modal-body">
-                            <CasesTable cases={this.props.cases} />
+                            <CasesTable 
+                                cases={this.props.cases}
+                                selectCase={this.props.selectCase}
+                            />
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>

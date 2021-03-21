@@ -114,7 +114,7 @@ function setCaseSearchModalListener(trigEl) {
     trigEl.addEventListener('click', (e) => {
         let inputId = e.target.id;
         const searchModal = $('#caseSearchModal');
-        searchModal.data('selected_input', inputId);
+        searchModal.attr('data-selected', inputId);
         searchModal.modal('show');
     });
 }

@@ -57,7 +57,18 @@ class CasesTable extends Component {
         return (
             <tr key={caseFile.id}>
                 <th scope="row">{caseDate}</th>
-                <td><a href={caseUrl}>{caseFile.description}</a></td>
+                <td>
+                    <a 
+                        href={caseUrl}
+                        onClick={(e) => {
+                            if (typeof this.props.selectCase != 'undefined') {
+                                this.props.selectCase(e, caseFile.id);
+                            }
+                        }}
+                    >
+                        {caseFile.description}
+                    </a>
+                </td>
                 <td>{caseFile.category}</td>
                 <td>{caseFile.primaryPerson.name}</td>
                 <td>{caseFile.video ? "Yes" : "No"}</td>

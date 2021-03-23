@@ -157,6 +157,11 @@ class CaseController extends AbstractController
                 }
             }
 
+            foreach ($form->get('related_cases') as $caseForm) {
+                $relatedCase = $caseForm->get('id')->getData();
+                $caseFile->addRelatedCase($relatedCase);
+            }
+
             $caseFile = $form->getData();
             $dm->persist($caseFile);
             $dm->flush();

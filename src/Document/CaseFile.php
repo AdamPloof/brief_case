@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Ignore;
 
 use App\Service\UploaderHelper;
 use App\Document\Person;
@@ -59,12 +60,14 @@ class CaseFile
     protected $video;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="setArray", mappedBy="related_cases")
+     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="setArray", mappedBy="related_cases", cascade={"persist"})
+     * @Ignore()
+     * TODO: Ignore is just temporary, this should be replaced by a proper way to handle circular references
      */
     public $casesRelatedWithThis;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="setArray", inversedBy="casesRelatedWithThis")
+     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="setArray", inversedBy="casesRelatedWithThis", cascade={"persist"})
      */
     public $related_cases;
 

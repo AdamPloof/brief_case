@@ -3,6 +3,7 @@
 namespace App\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 use App\Service\UploaderHelper;
 
@@ -13,21 +14,25 @@ class Person
 {
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"list_cases"})
      */
     protected $name;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"list_cases"})
      */
     protected $role;
 
     /**
      * @MongoDB\Field(type="hash")
+     * @Groups({"list_cases"})
      */
     protected $traits = [];
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"list_cases"})
      */
     protected $image;
 

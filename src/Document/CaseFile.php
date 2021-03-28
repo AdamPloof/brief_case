@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Serializer\Annotation\Ignore;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 use App\Service\UploaderHelper;
 use App\Document\Person;
@@ -19,50 +19,56 @@ class CaseFile
 {
     /**
      * @MongoDB\Id
+     * @Groups({"list_cases"})
      */
     protected $id;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"list_cases"})
      */
     protected $description;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"list_cases"})
      */
     protected $category;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"list_cases"})
      */
     protected $summary;
 
     /**
      * @MongoDB\Field(type="date")
+     * @Groups({"list_cases"})
      */
     protected $date;
 
     /**
      * @MongoDB\EmbedOne(targetDocument=Person::class)
      * @Assert\Valid
+     * @Groups({"list_cases"})
      */
     protected $primary_person;
 
     /**
      * @MongoDB\EmbedMany(targetDocument=Person::class, strategy="set")
      * @Assert\Valid
+     * @Groups({"list_cases"})
      */
     protected $associated_persons;
 
     /**
      * @MongoDB\Field(type="string")
+     * @Groups({"list_cases"})
      */
     protected $video;
 
     /**
      * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="setArray", mappedBy="related_cases", cascade={"persist"})
-     * @Ignore()
-     * TODO: Ignore is just temporary, this should be replaced by a proper way to handle circular references
      */
     public $casesRelatedWithThis;
 

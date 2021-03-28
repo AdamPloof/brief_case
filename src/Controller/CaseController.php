@@ -18,6 +18,15 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Serializer;
+
 use Doctrine\ODM\MongoDB\DocumentManager;
 
 class CaseController extends AbstractController
@@ -42,9 +51,19 @@ class CaseController extends AbstractController
     /**
      * @Route("/fetchcases", name="fetchcases", options={"expose": true})
      */
-    public function fetchCaseFiles(Request $request, DocumentManager $dm) {
+    public function fetchCaseFiles(Request $request, DocumentManager $dm): Response {
         $cases = $dm->getRepository(CaseFile::class)->findAllOrderByDate();
-        return $this->json($cases);
+
+        $encoder = new JsonEncoder();
+        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader())); // In order to reckognize @Group annotations
+        $normalizer = new ObjectNormalizer($classMetadataFactory, null, null, new ReflectionExtractor());
+        $serializer = new Serializer([new DateTimeNormalizer(), $normalizer], [$encoder]);
+
+        // dd($cases);
+        $json = $serializer->serialize($cases, 'json', ['groups' => 'list_cases']);
+        $response = new Response($json, Response::HTTP_OK);
+        $response->headers->set('Content-type', 'application/json');
+        return $response;
     }
 
     /**

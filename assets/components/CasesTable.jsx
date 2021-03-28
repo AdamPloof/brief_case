@@ -70,7 +70,7 @@ class CasesTable extends Component {
                     </a>
                 </td>
                 <td>{caseFile.category}</td>
-                <td>{caseFile.primaryPerson.name}</td>
+                <td>{caseFile.primary_person.name}</td>
                 <td>{caseFile.video ? "Yes" : "No"}</td>
             </tr>
         );

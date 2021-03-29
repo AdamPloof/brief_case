@@ -16,6 +16,11 @@ class CaseFileRepository extends DocumentRepository
     public function getRelatedCaseObjects($caseId) {
         $relatedCaseIds = array();
         $relatedCases = $this->find($caseId)->getRelatedCases();
+
+        if (!isset($relatedCases)) {
+            return null;
+        }
+
         foreach ($relatedCases as $relatedCase) {
             $relatedCaseIds[] = $relatedCase->getId();
         }

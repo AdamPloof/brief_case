@@ -18,10 +18,10 @@ class RelatedCaseTransformer implements DataTransformerInterface
     /**
      * Retrieve the id for a given CaseFile
      * 
-     * @param CaseFile|null $caseFile, 
+     * @param array|null $caseFile, 
      */
     public function transform($caseFile): ?string {
-        return $caseFile;
+        return strval($caseFile);
     }
 
     /**

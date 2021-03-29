@@ -68,19 +68,17 @@ class CaseFile
     protected $video;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="set", mappedBy="related_cases")
+     * @MongoDB\Field(type="collection")
      */
-    public $casesRelatedWithThis;
+    public $casesRelatedWithThis = [];
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="set", inversedBy="casesRelatedWithThis")
+     * @MongoDB\Field(type="collection")
      */
-    public $related_cases;
+    public $related_cases = [];
 
     public function __construct() {
         $this->associated_persons = new ArrayCollection();
-        $this->related_cases = new ArrayCollection();
-        $this->casesRelatedWithThis = new ArrayCollection();
     }
 
     public function getId(): ?string {
@@ -136,28 +134,29 @@ class CaseFile
     }
 
     public function removeAssociatedPerson(Person $associatedPerson) {
+        $personsToKeep = array();
         foreach ($this->associated_persons as $key => $person) {
-            if ($person == $associatedPerson) {
-                unset($this->associated_persons[$key]);
+            if ($person != $associatedPerson) {
+                $personsToKeep[] = $person;
             }
+            unset($this->associated_persons[$key]);
+        }
+        
+        foreach ($personsToKeep as $person) {
+            $this->addAssociatedPerson($person);
         }
     }
 
-    public function getRelatedCases(): Collection {
+    public function getRelatedCases(): ?array {
         return $this->related_cases;
     }
 
-    public function addRelatedCase(CaseFile $relatedCase): void {
-        $relatedCase->casesRelatedWithThis[] = $this;
-        $this->related_cases[] = $relatedCase;
+    public function setRelatedCases(array $relatedCase): void {
+        $this->related_cases = $relatedCase;
     }
 
-    public function removeRelatedCase(CaseFile $relatedCase) {
-        foreach ($this->related_cases as $key => $caseId) {
-            if ($caseId == $relatedCase->getId()) {
-                unset($this->related_cases[$key]);
-            }
-        }
+    public function removeRelatedCase(string $relatedCase) {
+        unset($this->related_cases[$relatedCase]);
     }
 
     public function getVideo(): ?string {

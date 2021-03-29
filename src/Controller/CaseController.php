@@ -177,10 +177,11 @@ class CaseController extends AbstractController
                 }
             }
 
-            foreach ($form->get('related_cases') as $caseForm) {
-                $relatedCase = $caseForm->get('id')->getData();
-                $caseFile->addRelatedCase($relatedCase);
+            $relatedCases = array();
+            foreach ($form->get('related_cases') as $relatedCase) {
+                $relatedCases[] = new \MongoDB\BSON\ObjectId($relatedCase->get('case_id')->getData());
             }
+            $caseFile->setRelatedCases($relatedCases);
 
             $caseFile = $form->getData();
             $dm->persist($caseFile);
@@ -190,9 +191,11 @@ class CaseController extends AbstractController
         }
 
         $relatedCaseDescriptions = array();
-        
-        foreach ($repo->getRelatedCaseObjects($mongoId) as $relatedCaseObject) {
-            $relatedCaseDescriptions[$relatedCaseObject->getId()] = $relatedCaseObject->getDescription();
+
+        if ($relatedCaseObjects = $repo->getRelatedCaseObjects($mongoId)) {
+            foreach ($relatedCaseObjects as $relatedCaseObject) {
+                $relatedCaseDescriptions[$relatedCaseObject->getId()] = $relatedCaseObject->getDescription();
+            }
         }
 
         $context = [

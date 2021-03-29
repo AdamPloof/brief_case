@@ -24,19 +24,13 @@ class RelatedCaseType extends AbstractType
             ->add('description', TextType::class, [
                 'mapped' => false,
             ])
-            ->add('id', TextType::class, [
+            ->add('case_id', TextType::class, [
                 'attr' => ['hidden' => true],
-                'label' => false
+                'label' => false,
+                'mapped' => false,
             ]);
 
-        $builder->get('id')
-            ->addModelTransformer($this->transformer);
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => Casefile::class,
-        ]);
+        // $builder->get('case_id')
+        //     ->addModelTransformer($this->transformer);
     }
 }

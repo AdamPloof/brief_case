@@ -46,7 +46,7 @@ class CaseSearch extends Component {
         let selectedStr = selectedParts.join('_');
 
         const descriptionInput = document.getElementById(selectedStr + '_description');
-        const idInput = document.getElementById(selectedStr + '_id');
+        const idInput = document.getElementById(selectedStr + '_case_id');
 
         let selectedCase = this.state.cases.find(caseFile => caseFile.id == caseId);
         descriptionInput.value = selectedCase.description;

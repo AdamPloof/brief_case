@@ -73,14 +73,24 @@
 {% endmacro makePersonForm %}
 
 <!-- Related Case Macro -->
-{% macro makeRelatedCaseForm(relatedCase) %}
+{% macro makeRelatedCaseForm(relatedCase, relatedDescription = null) %}
+        {% if relatedDescription %}
+            {% set relatedLabel = relatedDescription %}
+        {% else %}
+            {% set relatedLabel = "Search cases..." %}
+        {% endif %}
+
         <div class="card-header">
             Related Case
         </div>
         <div class="card-body">
             <div class="row">
                 <div class="col">
-                    {{ form_row(relatedCase.description) }}
+                    {{ form_row(relatedCase.description, {
+                        attr: {
+                            value: relatedLabel
+                        }
+                    }) }}
                     {{ form_row(relatedCase.id) }}
                 </div>
                 <div class="col-4">
@@ -161,7 +171,9 @@
 
         <div id="relatedCasesContainer" class="related-cases embed-form-grid" data-prototype="{{ formMacros.makeRelatedCaseForm(form.related_cases.vars.prototype)|e('html_attr') }}">
             {% for related_case in form.related_cases %}
-                {{ formMacros.makeRelatedCaseForm(related_case) }}
+            <div class="embed-case-form card card-grid">
+                {{ formMacros.makeRelatedCaseForm(related_case, related_case_descriptions[related_case.id.vars.value]) }}
+            </div>
             {% endfor %}
         </div>
 

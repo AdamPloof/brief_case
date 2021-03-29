@@ -68,12 +68,12 @@ class CaseFile
     protected $video;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="setArray", mappedBy="related_cases", cascade={"persist"})
+     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="set", mappedBy="related_cases")
      */
     public $casesRelatedWithThis;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="setArray", inversedBy="casesRelatedWithThis", cascade={"persist"})
+     * @MongoDB\ReferenceMany(targetDocument=CaseFile::class, storeAs="id", strategy="set", inversedBy="casesRelatedWithThis")
      */
     public $related_cases;
 

@@ -139,7 +139,8 @@ class CaseController extends AbstractController
      */
     public function editCaseFile(Request $request, DocumentManager $dm, UploaderHelper $uploaderHelper, $id) {
         $mongoId = new \MongoDB\BSON\ObjectId($id);
-        $caseFile = $dm->getRepository(CaseFile::class)->find($mongoId);
+        $repo = $dm->getRepository(CaseFile::class);
+        $caseFile = $repo->find($mongoId);
 
         if (!$caseFile) {
             throw $this->createNotFoundException('Could not find Case with id: ' . $id);
@@ -188,11 +189,18 @@ class CaseController extends AbstractController
             return $this->redirectToRoute('home', ['message' => $caseFile->getDescription() . ' has been updated!']);
         }
 
+        $relatedCaseDescriptions = array();
+        
+        foreach ($repo->getRelatedCaseObjects($mongoId) as $relatedCaseObject) {
+            $relatedCaseDescriptions[$relatedCaseObject->getId()] = $relatedCaseObject->getDescription();
+        }
+
         $context = [
             'form' => $form->createView(),
             'form_title' => 'Edit Case',
             'video_filename' => $this->getOriginalUploadFilename($caseFile->getVideo()),
             'image_list' => $this->makePersonsImageList($caseFile),
+            'related_case_descriptions' => $relatedCaseDescriptions,
         ];
 
         return $this->render("cases/editcase.html.twig", $context);

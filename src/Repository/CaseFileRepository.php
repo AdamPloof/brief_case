@@ -12,4 +12,17 @@ class CaseFileRepository extends DocumentRepository
             ->getQuery()
             ->execute();
     }
+
+    public function getRelatedCaseObjects($caseId) {
+        $relatedCaseIds = array();
+        $relatedCases = $this->find($caseId)->getRelatedCases();
+        foreach ($relatedCases as $relatedCase) {
+            $relatedCaseIds[] = $relatedCase->getId();
+        }
+
+        return $this->createQueryBuilder()
+            ->field('_id')->in($relatedCaseIds)
+            ->getQuery()
+            ->execute();
+    }
 }

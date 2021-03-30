@@ -66,7 +66,7 @@ function addFormToCollection(collectionContainerClass, formClass) {
     collectionContainer.appendChild(newFormContainer);
 
     // Add case search modal trigger to input on embedded case forms
-    if (formClass = 'embed-case-form') {
+    if (formClass == 'embed-case-form') {
         setCaseSearchModalListener(newFormContainer.getElementsByTagName('input')[0]);
     }
 

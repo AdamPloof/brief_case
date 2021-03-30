@@ -55,7 +55,7 @@ class CaseFile
     protected $primary_person;
 
     /**
-     * @MongoDB\EmbedMany(targetDocument=Person::class, strategy="set")
+     * @MongoDB\EmbedMany(targetDocument=Person::class, strategy="setArray")
      * @Assert\Valid
      * @Groups({"list_cases"})
      */

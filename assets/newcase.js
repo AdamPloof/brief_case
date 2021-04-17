@@ -120,10 +120,14 @@ function setCaseSearchModalListener(trigEl) {
     });
 }
 
-// TODO: Find a good way to get the id of the case being edited or bail out if new form
 function loadRelatedCases() {
     const collectionContainerClass = 'related-cases';
     const caseId = getCaseId();
+
+    if (!caseId) {
+        return;
+    }
+
     const cases = fetchRelatedCases(caseId);
     
     cases.then((data) => {
@@ -143,6 +147,10 @@ function getCaseId() {
     let parts = path.split('/');
     let id = parts[parts.length - 1];
 
+    if (id == 'newcase') {
+        return false;
+    }
+
     if (id.includes('?')) {
         id = id.split('?')[0];
     }
@@ -151,7 +159,7 @@ function getCaseId() {
 }
 
 async function fetchRelatedCases(caseId) {
-    // let url = Routing.generate('fetchrelated', {id: '6016e0df75b92246735b2532'});
+    // let url = Routing.generate('fetchrelated', {id: caseId});
     let url = '/fetchrelated/' + caseId;
 
     let params = {

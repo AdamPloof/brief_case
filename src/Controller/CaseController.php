@@ -122,6 +122,17 @@ class CaseController extends AbstractController
             }
 
             $caseFile = $form->getData();
+
+            // Added related cases separately since they are unmapped in the form
+            $relatedCases = array();
+            foreach ($form->get('related_cases') as $relatedCase) {
+                $relatedCaseId = $relatedCase->get('case_id')->getData();
+                $relatedCases[] = new \Mongo\BSON\ObjectId($relatedCaseId);
+                $repo->find($relatedCaseId)->addRelatedCase($mongoId);
+            }
+
+            $caseFile->setRelatedCases($relatedCases);
+            
             $dm->persist($caseFile);
             $dm->flush();
 

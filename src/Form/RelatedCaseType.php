@@ -30,7 +30,7 @@ class RelatedCaseType extends AbstractType
                 'mapped' => false,
             ]);
 
-        // $builder->get('case_id')
-        //     ->addModelTransformer($this->transformer);
+        $builder->get('case_id')
+            ->addModelTransformer($this->transformer);
     }
 }

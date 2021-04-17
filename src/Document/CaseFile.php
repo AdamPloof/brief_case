@@ -70,12 +70,7 @@ class CaseFile
     /**
      * @MongoDB\Field(type="collection")
      */
-    public $casesRelatedWithThis = [];
-
-    /**
-     * @MongoDB\Field(type="collection")
-     */
-    public $related_cases = [];
+    protected $related_cases = [];
 
     public function __construct() {
         $this->associated_persons = new ArrayCollection();
@@ -151,8 +146,12 @@ class CaseFile
         return $this->related_cases;
     }
 
-    public function setRelatedCases(array $relatedCase): void {
-        $this->related_cases = $relatedCase;
+    public function setRelatedCases(array $relatedCases): void {
+        $this->related_cases = $relatedCases;
+    }
+
+    public function addRelatedCase(\MongoDB\BSON\ObjectId $relatedCase): void {
+        $this->related_cases[] = $relatedCase;
     }
 
     public function removeRelatedCase(string $relatedCase) {

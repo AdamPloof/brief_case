@@ -177,25 +177,22 @@ class CaseController extends AbstractController
                 }
             }
 
+            $caseFile = $form->getData();
+
+            // Added related cases separately since they are unmapped in the form
             $relatedCases = array();
             foreach ($form->get('related_cases') as $relatedCase) {
-                $relatedCases[] = new \MongoDB\BSON\ObjectId($relatedCase->get('case_id')->getData());
+                $relatedCaseId = $relatedCase->get('case_id')->getData();
+                $relatedCases[] = new \Mongo\BSON\ObjectId($relatedCaseId);
+                $repo->find($relatedCaseId)->addRelatedCase($mongoId);
             }
+
             $caseFile->setRelatedCases($relatedCases);
 
-            $caseFile = $form->getData();
             $dm->persist($caseFile);
             $dm->flush();
 
             return $this->redirectToRoute('home', ['message' => $caseFile->getDescription() . ' has been updated!']);
-        }
-
-        $relatedCaseDescriptions = array();
-
-        if ($relatedCaseObjects = $repo->getRelatedCaseObjects($mongoId)) {
-            foreach ($relatedCaseObjects as $relatedCaseObject) {
-                $relatedCaseDescriptions[$relatedCaseObject->getId()] = $relatedCaseObject->getDescription();
-            }
         }
 
         $context = [
@@ -203,10 +200,28 @@ class CaseController extends AbstractController
             'form_title' => 'Edit Case',
             'video_filename' => $this->getOriginalUploadFilename($caseFile->getVideo()),
             'image_list' => $this->makePersonsImageList($caseFile),
-            'related_case_descriptions' => $relatedCaseDescriptions,
         ];
 
         return $this->render("cases/editcase.html.twig", $context);
+    }
+
+    /**
+     * @Route("/fetchrelated/{id}", name="fetchrelated", requirements={"id"="[\d\w]+"}, options={"expose": true})
+     */
+    public function fetchRelatedCases(DocumentManager $dm, $id) {
+        $mongoId = new \MongoDB\BSON\ObjectId($id);
+        $repo = $dm->getRepository(CaseFile::class);
+        $caseFile = $repo->find($mongoId);
+
+        $relatedCases = array();
+        foreach ($caseFile->getRelatedCases() as $relCaseId) {
+            $relatedCases[] = array(
+                'id' => strval($relCaseId),
+                'description' => $repo->find($relCaseId)->getDescription() 
+            );
+        }
+
+        return $this->json($relatedCases);
     }
 
     // Collect a list of image filenames for each person in a case

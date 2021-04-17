@@ -73,7 +73,7 @@
 {% endmacro makePersonForm %}
 
 <!-- Related Case Macro -->
-{% macro makeRelatedCaseForm(relatedCase, relatedDescription = null) %}
+{% macro makeRelatedCaseForm(relatedCase, relatedId = null, relatedDescription = null) %}
         {% if relatedDescription %}
             {% set relatedLabel = relatedDescription %}
         {% else %}
@@ -170,11 +170,12 @@
         </div>
 
         <div id="relatedCasesContainer" class="related-cases embed-form-grid" data-prototype="{{ formMacros.makeRelatedCaseForm(form.related_cases.vars.prototype)|e('html_attr') }}">
-            {% for related_case in form.related_cases %}
+            <!-- TODO: Handle rendering existing related cases by manually rendering form elements in the macro -->
+            {# {% for related_case in related_cases %}
             <div class="embed-case-form card card-grid">
-                {{ formMacros.makeRelatedCaseForm(related_case, related_case_descriptions[related_case.id.vars.value]) }}
+                {{ formMacros.makeRelatedCaseForm(form.related_cases.vars.prototype, related_case.id, related_case.description) }}
             </div>
-            {% endfor %}
+            {% endfor %} #}
         </div>
 
     {{ form_end(form) }}

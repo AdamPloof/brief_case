@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initRelatedCaseInputs();
     initRemoveEmbedForms();
     loadPrimaryPersons();
+    loadRelatedCases();
 });
 
 function initAddOtherPersons() {
@@ -117,6 +118,50 @@ function setCaseSearchModalListener(trigEl) {
         searchModal.attr('data-selected', inputId);
         searchModal.modal('show');
     });
+}
+
+// TODO: Find a good way to get the id of the case being edited or bail out if new form
+function loadRelatedCases() {
+    const collectionContainerClass = 'related-cases';
+    const caseId = getCaseId();
+    const cases = fetchRelatedCases(caseId);
+    
+    cases.then((data) => {
+        for (let caseFile of data) {
+            addFormToCollection(collectionContainerClass, 'embed-case-form');
+            let caseForms = document.getElementsByClassName('embed-case-form');
+            let caseForm = caseForms[caseForms.length - 1];
+            let inputs = caseForm.querySelectorAll('input');
+            inputs[0].value = caseFile.description;
+            inputs[1].value = caseFile.id;
+        }
+    });
+}
+
+function getCaseId() {
+    let path = window.location.pathname;
+    let parts = path.split('/');
+    let id = parts[parts.length - 1];
+
+    if (id.includes('?')) {
+        id = id.split('?')[0];
+    }
+
+    return id;
+}
+
+async function fetchRelatedCases(caseId) {
+    // let url = Routing.generate('fetchrelated', {id: '6016e0df75b92246735b2532'});
+    let url = '/fetchrelated/' + caseId;
+
+    let params = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const response = await fetch(url, params);
+    return response.json();
 }
 
 // Watch the primary person input and fetch existing person that match input

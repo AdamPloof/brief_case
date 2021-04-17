@@ -8,29 +8,23 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class RelatedCaseTransformer implements DataTransformerInterface
-{
-    private $dm;
-
-    public function __construct(DocumentManager $dm) {
-        $this->dm = $dm;
-    }
-    
+{ 
     /**
-     * Retrieve the id for a given CaseFile
+     * Convert BSON ObjectId to string
      * 
-     * @param array|null $caseFile, 
+     * @param \MongoDB\BSON\ObjectId|null $caseFile, 
      */
     public function transform($caseFile): ?string {
         return strval($caseFile);
     }
 
     /**
-     * Retrieve the CaseFile for agiven id
+     * Transform id string to BSON ObjectId
      * 
-     * @param \MongoDB\BSON\ObjectId $caseId
-     * @throws TransformationFailedException if can't find case for id
+     * @param string $caseId
+     * @throws TransformationFailedException if can't make ObjectId
      */
-    public function reverseTransform($caseId): ?CaseFile {
-        return $this->dm->getRepository(CaseFile::class)->find($caseId);
+    public function reverseTransform($caseId): ?\MongoDB\BSON\ObjectId {
+        return new \MongoDB\BSON\ObjectId($caseId);
     }
 }

@@ -68,6 +68,7 @@ class CaseType extends AbstractType
                 'allow_delete' => true,
                 'label' => false,
                 'by_reference' => false,
+                'mapped' => false,
             ])
             ->add('submit', SubmitType::class, ['label' => 'Submit']);
     }

@@ -71,8 +71,10 @@ class CaseController extends AbstractController
      */
     public function viewCaseFile(Request $request, DocumentManager $dm, $id)
     {
+        $repo = $dm->getRepository(CaseFile::class);
         $mongoId = new \MongoDB\BSON\ObjectId($id);
-        $caseFile = $dm->getRepository(CaseFile::class)->find($mongoId);
+        $caseFile = $repo->find($mongoId);
+        $relatedCases = $repo->getRelatedCaseObjects($mongoId);
 
         if (!$caseFile) {
             throw $this->createNotFoundException('Could not find Case with id: ' . $id);
@@ -80,6 +82,7 @@ class CaseController extends AbstractController
 
         return $this->render("cases/viewcase.html.twig", [
             "case" => $caseFile,
+            'related_cases' => $relatedCases,
         ]);
     }
 
@@ -89,6 +92,7 @@ class CaseController extends AbstractController
     public function newCaseFile(Request $request, DocumentManager $dm, UploaderHelper $uploaderHelper)
     {
         $caseFile = new CaseFile();
+        $repo = $dm->getRepository(CaseFile::class);
 
         $form = $this->createForm(CaseType::class, $caseFile);
         $form->handleRequest($request);
@@ -127,14 +131,16 @@ class CaseController extends AbstractController
             $relatedCases = array();
             foreach ($form->get('related_cases') as $relatedCase) {
                 $relatedCaseId = $relatedCase->get('case_id')->getData();
-                $relatedCases[] = new \Mongo\BSON\ObjectId($relatedCaseId);
-                $repo->find($relatedCaseId)->addRelatedCase($mongoId);
+                $relatedCases[] = new \MongoDB\BSON\ObjectId($relatedCaseId);
             }
 
             $caseFile->setRelatedCases($relatedCases);
             
             $dm->persist($caseFile);
             $dm->flush();
+
+            // Have to connect related cases to this one separately because ID isn't generated until post flush
+            $this->cascadeRelatedCases($caseFile, $dm);
 
             return $this->redirectToRoute('home', ['message' => 'Created New Case!']);
         }
@@ -143,6 +149,17 @@ class CaseController extends AbstractController
             'form' => $form->createView(),
             'form_title' => 'New Case',
         ]);
+    }
+
+    private function cascadeRelatedCases($caseFile, &$dm) {
+        $repo = $dm->getRepository(CaseFile::class);
+
+        foreach ($caseFile->getRelatedCases() as $relatedCaseId) {
+            $mongoId = new \MongoDB\BSON\ObjectId($caseFile->getId());
+            $repo->find($relatedCaseId)->addRelatedCase($mongoId);
+        }
+
+        $dm->flush();
     }
 
     /**
@@ -194,7 +211,7 @@ class CaseController extends AbstractController
             $relatedCases = array();
             foreach ($form->get('related_cases') as $relatedCase) {
                 $relatedCaseId = $relatedCase->get('case_id')->getData();
-                $relatedCases[] = new \Mongo\BSON\ObjectId($relatedCaseId);
+                $relatedCases[] = new \MongoDB\BSON\ObjectId($relatedCaseId);
                 $repo->find($relatedCaseId)->addRelatedCase($mongoId);
             }
 

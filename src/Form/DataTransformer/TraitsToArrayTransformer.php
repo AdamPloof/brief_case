@@ -46,6 +46,12 @@ class TraitsToArrayTransformer implements DataTransformerInterface
 
         foreach ($traits as $trait) {
             $hash = explode(':', $trait);
+            
+            // Skip improperly formatted traits
+            if (!$hash[0] || $hash[1]) {
+                continue;
+            }
+
             $traitsArr[trim($hash[0])] = trim($hash[1]);
         }
         return $traitsArr;

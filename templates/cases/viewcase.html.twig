@@ -84,13 +84,29 @@
                 <h4>Associated Persons</h4>
             </div>
             {% if case.associatedPersons %}
-            {% for person in case.associatedPersons %}
-                {{ viewMacros.makePersonContainer(person, "assoc-person") }}
-                {% if person != case.associatedPersons[case.associatedPersons|length - 1] %}
-                    <hr />
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+                {% for person in case.associatedPersons %}
+                    {{ viewMacros.makePersonContainer(person, "assoc-person") }}
+                    {% if person != case.associatedPersons[case.associatedPersons|length - 1] %}
+                        <hr />
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="related-cases">
+            <div class="body-header">
+                <h4>Related Cases</h4>
+            </div>
+            {% if related_cases %}
+                <ul class="related-case-list">
+                    {% for relatedCase in related_cases %}
+                        <li>
+                            <a href="{{ path('viewcase', {id: relatedCase.id}) }}">
+                                {{ relatedCase.description }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
         </div>
     </div>
 </div>

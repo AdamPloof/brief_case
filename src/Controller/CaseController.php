@@ -8,6 +8,7 @@ use App\Form\CaseType;
 
 use App\Service\UploaderHelper;
 use App\Service\CaseGenerator;
+use App\Service\PersonFilesBuilder;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -349,6 +350,13 @@ class CaseController extends AbstractController
         }
 
         return $this->json($persons);
+    }
+
+    /**
+     * @Route("/persons/", options={"expose"=true}, name="persons")
+     */
+    public function viewPersons(PersonFilesBuilder $pfb): Response {
+        return $this->json($pfb->getAllPersonFiles());
     }
 
     /**

@@ -58,4 +58,47 @@ class PersonFilesBuilder
 
         return $personFiles;
     }
+
+    public function getPersonFiles($name) {
+        $qb = $this->dm->createQueryBuilder(CaseFile::class);
+        
+        $cases = $qb->addOr($qb->expr()->field('primary_person.name')->equals($name))
+            ->addOr($qb->expr()->field('associated_persons.name')->equals($name))
+            ->readOnly()
+            ->getQuery()
+            ->execute();
+
+        $files = array(
+            'person' => null,
+            'primary' => array(),
+            'associated' => array()
+        );
+
+        // TODO: The person info currently comes from taking the first matching person document
+        // It would be better if it gathered a list of all traits and images into a master info list
+        foreach ($cases as $case) {
+            $primaryPerson = $case->getPrimaryPerson();
+            if ($primaryPerson->getName() == $name) {
+                $files['primary'][] = $case;
+
+                if (!$files['person']) {
+                    $files['person'] = $primaryPerson;
+                }
+                continue;
+            }
+
+            foreach ($case->getAssociatedPersons() as $person) {
+                if ($person->getName() == $name) {
+                    $files['associated'][] = $case;
+
+                    if (!$files['person']) {
+                        $files['person'] = $person;
+                    }
+                    continue;
+                }
+            }
+        }
+
+        return $files;
+    }
 }

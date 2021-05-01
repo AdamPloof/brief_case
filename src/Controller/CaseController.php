@@ -353,13 +353,6 @@ class CaseController extends AbstractController
     }
 
     /**
-     * @Route("/persons/", options={"expose"=true}, name="persons")
-     */
-    public function viewPersons(PersonFilesBuilder $pfb): Response {
-        return $this->json($pfb->getAllPersonFiles());
-    }
-
-    /**
      * @Route("/generate", name="generate")
      */
     public function generateCases(Request $request, DocumentManager $dm)

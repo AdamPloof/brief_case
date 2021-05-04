@@ -57,4 +57,8 @@ class UploaderHelper
     public function getPublicPath(string $path): string {
         return '/uploads/' . $path;
     }
+
+    public function getPublicImagePath(string $path): string {
+        return '/uploads/' . self::IMAGE_PATH . '/' . $path;
+    }
 }

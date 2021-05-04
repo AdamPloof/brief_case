@@ -1,5 +1,81 @@
 {% extends 'base.html.twig' %}
 
+{% import _self as personMacros %}
+
+{% macro makeCaseCard(case) %}
+    <div class="card case-card">
+        <div class="card-header">
+            <div class="header-title">
+                <a href="{{ path('viewcase', {id: case.id}) }}">{{ case.description }}</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="card-row">
+                <strong>Date: </strong> {{ case.date|date('F j, Y') }}
+            </div>
+            <div class="card-row">
+                <strong>Category: </strong>{{ case.category }}
+            </div>
+            <div class="card-row">
+                <strong>Summary: </strong><br>
+                    {{ case.summary[0:255]|striptags }}...
+            </div>
+        </div>
+    </div>
+{% endmacro makeCaseCard %}
+
 {% block body %}
-    
+    <div class="person-detail-container">
+        <div class="header">
+            <h3>{{ files.person.name }}</h3>
+        </div>
+        <div class="body">
+            <div class="person-info">
+                <div class="section-body">
+                    <div class="section-col">
+                        <div class="section-row">
+                            <strong>Role: </strong> {{ files.person.role }}
+                        </div>
+                        <div class="traits-section">
+                            {% if files.person.traits %}
+                                {% for trait, val in files.person.traits %}
+                                    <div class="trait-row">
+                                        <strong>{{ trait }}:&nbsp;</strong> {{ val }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="section-col person-image">
+                        {% if files.person.image %}
+                            <img src="{{ uploaded_image(files.person.image) }}" alt="" />
+                        {% endif %}
+                    </div>
+                </div>  
+            </div>
+            <div class="cases-section">
+                <div class="section-header">
+                    <h4>Primary Cases</h4>
+                </div>
+                <div class="section-body">
+                    {% for case in files.primary %}
+                        {{ personMacros.makeCaseCard(case) }}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="cases-section">
+                <div class="section-header">
+                    <h4>Associated Cases</h4>
+                </div>
+                <div class="section-body">
+                    {% for case in files.associated %}
+                        {{ personMacros.makeCaseCard(case) }}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+
+        </div>
+    </div>
 {% endblock %}

@@ -7,7 +7,9 @@
     <div class="person-container">
         <div class="person-info">
             <div class="person-name">
-                <h5>{{ person.name }}</h5>
+                <h5>
+                    <a href="{{ path('viewperson', {name: person.name}) }}">{{ person.name }}</a>
+                </h5>
             </div>
             <div class="person-role">
                 <strong>Role: </strong>{{ person.role }}

@@ -32,7 +32,7 @@ class PersonController extends AbstractController
      */
     public function viewPerson(PersonFilesBuilder $pfb, $name): Response {
         $files = $pfb->getPersonFiles($name);
-        dd($files);
+        // dd($files);
         return $this->render('persons/view.html.twig', [
             'title' => 'Person Detail',
             'files' => $files,

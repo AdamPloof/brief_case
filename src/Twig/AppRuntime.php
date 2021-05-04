@@ -16,4 +16,8 @@ class AppRuntime implements RuntimeExtensionInterface
     public function getUploadedAssetPath(string $path): string {
         return $this->uploaderHelper->getPublicPath($path);
     }
+
+    public function getUploadedImagePath(string $path): string {
+        return $this->uploaderHelper->getPublicImagePath($path);
+    }
 }

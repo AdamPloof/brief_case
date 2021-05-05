@@ -1,22 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<table class="table table-bordered table-hover table-striped">
-    <thead class="thead-dark">
-      <tr>
-            <th scope="col">Person</th>
-            <th scope="col">Cases - Primary</th>
-            <th scope="col">Cases - Associated</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for name, vals in persons %}
-            <tr>
-                <td><a href="{{ path('viewperson', {name: name}) }}">{{ name }}</a></td>
-                <td>{{ vals.primary|length }}</td>
-                <td>{{ vals.associated|length }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div id="persons-list-container">
+    <!-- React PersonList goes here -->
+</div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('persons') }}
+{% endblock javascripts %}

@@ -32,6 +32,7 @@ class PersonFilesBuilder
                 $personFiles[$primaryPerson]['primary'][] = $case->getId(); 
             } else {
                 $personFiles[$primaryPerson] = array(
+                    'name' => $primaryPerson,
                     'primary' => array(
                         $case->getId()
                     ),
@@ -47,6 +48,7 @@ class PersonFilesBuilder
                     $personFiles[$assocName]['associated'][] = $case->getId(); 
                 } else {
                     $personFiles[$assocName] = array(
+                        'name' => $assocName,
                         'primary' => array(),
                         'associated' => array(
                             $case->getId()
@@ -56,7 +58,7 @@ class PersonFilesBuilder
             }
         }
 
-        return $personFiles;
+        return array_values($personFiles);
     }
 
     public function getPersonFiles($name) {

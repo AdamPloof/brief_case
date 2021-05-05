@@ -19,12 +19,18 @@ class PersonController extends AbstractController
     /**
      * @Route("/persons/", options={"expose"=true}, name="persons")
      */
-    public function viewPersons(PersonFilesBuilder $pfb): Response {
-        $persons = $pfb->getAllPersonFiles();
+    public function viewPersons(): Response {
         return $this->render('persons/list.html.twig', [
             'title' => 'Persons',
-            'persons' => $persons,
         ]);
+    }
+
+    /**
+     * @Route("/fetchpersons/", options={"expose"=true}, name="fetchpersons")
+     */
+    public function fetchPersons(PersonFilesBuilder $pfb): Response {
+        $persons = $pfb->getAllPersonFiles();
+        return $this->json($persons);
     }
 
     /**

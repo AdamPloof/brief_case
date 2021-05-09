@@ -27,6 +27,7 @@ Encore
     .addEntry('newcase', './assets/newcase.js')
     .addEntry('cases', './assets/cases.jsx')
     .addEntry('persons', './assets/persons.jsx')
+    .addEntry('reports', './assets/reports.jsx')
     //.addEntry('page1', './assets/page1.js')
     //.addEntry('page2', './assets/page2.js')
 

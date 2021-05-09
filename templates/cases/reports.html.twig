@@ -2,6 +2,13 @@
 {% block title %}Reports{% endblock %}
 
 {% block body %}
-<input type="text" id="case_date" />
+<div id="report-container">
+    {# React Component goes here #}
+</div>
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('reports') }}
+{% endblock javascripts %}
 

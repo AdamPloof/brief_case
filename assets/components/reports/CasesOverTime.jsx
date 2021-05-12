@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Chart from 'chart.js/auto';
 import Routing from '../../routing';
+import { chartColors } from '../utils/colors';
 
 class CasesOverTime extends Component {
     constructor(props) {
@@ -9,12 +10,15 @@ class CasesOverTime extends Component {
             startDate: null,
             endDate: null,
             data: [],
-            chartLabels: [],
-            chartData: [],
+            labels: [],
+            datasets: [],
+            categories: [],
             category: 'All',
             loading: true,
         }
         this.chart = null;
+        this.chartColors = [...chartColors];
+        this.colorsInUse = [];
     }
 
     componentDidMount() {
@@ -26,23 +30,26 @@ class CasesOverTime extends Component {
             this.setChartData();
         }
 
-        if (this.state.chartData != prevState.chartData && this.state.chartData.length != 0) {
+        if (this.state.datasets != prevState.datasets && this.state.datasets.length != 0) {
             this.updateChart();
         }
     }
 
     setChartData() {
-        let chartLabels = this.state.data.map(stats => {
+        const labels = this.state.data.map(stats => {
             return stats.EndOfWeekDate;
         });
 
-        let chartData = this.state.data.map(stats => {
-            return stats[this.state.category];
-        });
+        let categories = Object.keys(this.state.data[0]);
+        const idx = categories.indexOf('EndOfWeekDate');
+        categories.splice(idx, 1);
+
+        const datasets = this.makeDatasets(categories);
         
         this.setState({
-            chartLabels,
-            chartData,
+            labels,
+            datasets,
+            categories,
         });
     }
 
@@ -76,16 +83,49 @@ class CasesOverTime extends Component {
             });
     }
 
+    makeDatasets(categories) {
+        let datasets = [];
+        for (let category of categories) {
+            datasets.push(this.makeDataset(category));
+        }
+
+        return datasets;
+    }
+
+    makeDataset(category) {
+        const data = this.state.data.map(stats => {
+            return stats[category];
+        });
+
+        const color = this.getRandomChartColor();
+
+        return {
+            label: category,
+            backgroundColor: color,
+            borderColor: color,
+            data
+        };
+    }
+
+    getRandomChartColor() {
+        // Recycle colors in use back into available colors once all colors have been used
+        // Rinse and repeat as needed.
+        if (this.chartColors.length == 0) {
+            this.chartColors = [...this.colorsInUse];
+            this.colorsInUse = [];
+        }
+
+        let color = this.chartColors.pop();
+        this.colorsInUse.push(color);
+
+        return color;
+    }
+
     drawChart() {
-        const labels = [...this.state.chartLabels];
+        const labels = [...this.state.labels];
         const data = {
             labels: labels,
-            datasets: [{
-                label: 'Incidents by Week',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [...this.state.chartData],
-            }]
+            datasets: [...this.state.datasets]
           };
 
         const config = {

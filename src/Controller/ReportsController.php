@@ -23,7 +23,7 @@ class ReportsController extends AbstractController
     } 
 
     /**
-     * @Route("/reports/cases-over-time", name="cases_over_time")
+     * @Route("/reports/cases-over-time", name="cases_over_time", options={"expose"=true})
      * Get count of cases for each category grouped by week
      * TODO: allow for variable date range size for grouping
      */
@@ -46,18 +46,20 @@ class ReportsController extends AbstractController
 
             if (!isset($casesOverTime[$eowStr])) {
                 $casesOverTime[$eowStr] = $this->makeStatsByCategoryArray();
+                $casesOverTime[$eowStr]['EndOfWeekDate'] = $eowStr;
             }
 
             $casesOverTime[$eowStr][$category] += 1;
-            $casesOverTime[$eowStr]['total'] += 1;
+            $casesOverTime[$eowStr]['All'] += 1;
         }
 
-        return $casesOverTime;
+        return $this->json(array_values($casesOverTime));
     }
 
     // TODO: The category list currently lives in the CaseType form builder. Should centralize this in a service.
     private function makeStatsByCategoryArray() {
         return array(
+            'EndOfWeekDate' => null,
             'Shoplifting' => 0,
             'Aggressive Behavior' => 0,
             'Harrasment' => 0,
@@ -66,7 +68,7 @@ class ReportsController extends AbstractController
             'Vehicle Accident' => 0,
             'Vandalism' => 0,
             'Medical Emergency' => 0,
-            'total' => 0,
+            'All' => 0,
         );
     }
 }

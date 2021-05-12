@@ -1,36 +1,90 @@
 import React, { Component } from 'react';
 import Chart from 'chart.js/auto';
+import Routing from '../../routing';
 
 class CasesOverTime extends Component {
     constructor(props) {
         super(props);
         this.state = {
             startDate: null,
-            endDate: null
+            endDate: null,
+            data: [],
+            chartLabels: [],
+            chartData: [],
+            category: 'All',
+            loading: true,
         }
         this.chart = null;
     }
 
     componentDidMount() {
-        this.makeLineChart();
+        this.fetchStats();
     }
 
-    makeLineChart() {
-        const labels = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-        ];
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.data != prevState.data) {
+            this.setChartData();
+        }
+
+        if (this.state.chartData != prevState.chartData && this.state.chartData.length != 0) {
+            this.updateChart();
+        }
+    }
+
+    setChartData() {
+        let chartLabels = this.state.data.map(stats => {
+            return stats.EndOfWeekDate;
+        });
+
+        let chartData = this.state.data.map(stats => {
+            return stats[this.state.category];
+        });
+        
+        this.setState({
+            chartLabels,
+            chartData,
+        });
+    }
+
+    updateChart() {
+        if (!this.chart) {
+            this.drawChart();
+            return;
+        }
+
+        this.chart.update('reset');
+    }
+
+    fetchStats() {
+        const url = Routing.generate('cases_over_time');
+        const params = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+
+        fetch(url, params).then(res => res.json())
+            .then(data => {
+                this.setState({
+                    data,
+                    loading: false,
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    drawChart() {
+        const labels = [...this.state.chartLabels];
         const data = {
             labels: labels,
             datasets: [{
-                label: 'My First dataset',
+                label: 'Incidents by Week',
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45],
+                data: [...this.state.chartData],
             }]
           };
 

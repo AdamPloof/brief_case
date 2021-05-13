@@ -98,12 +98,14 @@ class CasesOverTime extends Component {
         });
 
         const color = this.getRandomChartColor();
+        const hidden = category != 'All';
 
         return {
             label: category,
             backgroundColor: color,
             borderColor: color,
-            data
+            data,
+            hidden,
         };
     }
 
@@ -131,7 +133,14 @@ class CasesOverTime extends Component {
         const config = {
             type: 'line',
             data,
-            options: {}
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        align: 'start',
+                    }
+                },
+            }
         };
         
         const ctx = document.getElementById('casesOverTime');
@@ -142,7 +151,7 @@ class CasesOverTime extends Component {
         return (
             <div className="report-box">
                 <div className="box-header">
-                    <h1>Cases over time</h1>
+                    <h1>Cases by Week</h1>
                 </div>
                 <div className="box-body">
                     <div className="chart-container">

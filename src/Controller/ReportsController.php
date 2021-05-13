@@ -56,6 +56,32 @@ class ReportsController extends AbstractController
         return $this->json(array_values($casesOverTime));
     }
 
+    /**
+     * @Route("reports/cases-by-category", name="cases_by_category", options={"expose"=true})
+     */
+    public function casesByCategory(DocumentManager $dm) {
+        $cases = $dm->getRepository(CaseFile::class)->findAll();
+        $caseTotalsByCategory = array();
+        $totalCases = count($cases);
+
+        foreach ($cases as $case) {
+            $category = $case->getCategory();
+
+            if (!isset($caseTotalsByCategory[$category])) {
+                $caseTotalsByCategory[$category] = 1;
+            } else {
+                $caseTotalsByCategory[$category] += 1;
+            }
+        }
+
+        // Transforming raw category totals to ratios of total cases
+        array_walk($caseTotalsByCategory, function(&$val, $key) use ($totalCases) {
+            $val = round($val / $totalCases, 2);
+        });
+
+        return $this->json($caseTotalsByCategory);
+    }
+
     // TODO: The category list currently lives in the CaseType form builder. Should centralize this in a service.
     private function makeStatsByCategoryArray() {
         return array(

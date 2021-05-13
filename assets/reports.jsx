@@ -1,25 +1,18 @@
 import React, { Component } from 'react';
 import ReactDom from 'react-dom';
-import Chart from 'chart.js/auto';
 
 import CasesOverTime from './components/reports/CasesOverTime';
+import CasesByCategory from './components/reports/CasesByCategory';
+
+// TODO: Centralize the color coding of categories here pass as props to individual reports/charts
 
 class CaseReports extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            cases: null
-        }
-    }
-    
+
     render() { 
         return (
             <div className="report-wrapper">
-                <CasesOverTime cases={this.state.cases} />
-                <div className="report-box">
-
-                </div>
-
+                <CasesOverTime />
+                <CasesByCategory />
             </div>
         );
     }

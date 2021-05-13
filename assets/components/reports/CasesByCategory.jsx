@@ -3,7 +3,7 @@ import Chart from 'chart.js/auto';
 import Routing from '../../routing';
 import { chartColors } from '../utils/colors';
 
-class CasesOverTime extends Component {
+class CasesByCategory extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -11,8 +11,7 @@ class CasesOverTime extends Component {
             endDate: null,
             data: [],
             labels: [],
-            datasets: [],
-            categories: [],
+            chartData: [],
             loading: true,
         }
         this.chart = null;
@@ -29,26 +28,22 @@ class CasesOverTime extends Component {
             this.setChartData();
         }
 
-        if (this.state.datasets != prevState.datasets && this.state.datasets.length != 0) {
+        if (this.state.chartData != prevState.chartData && this.state.chartData.length != 0) {
             this.updateChart();
         }
     }
 
     setChartData() {
         const labels = this.state.data.map(stats => {
-            return stats.EndOfWeekDate;
+            return stats.category;
         });
-
-        let categories = Object.keys(this.state.data[0]);
-        const idx = categories.indexOf('EndOfWeekDate');
-        categories.splice(idx, 1);
-
-        const datasets = this.makeDatasets(categories);
+        const chartData = this.state.data.map(stats => {
+            return stats.ratio;
+        });
         
         this.setState({
             labels,
-            datasets,
-            categories,
+            chartData,
         });
     }
 
@@ -62,7 +57,7 @@ class CasesOverTime extends Component {
     }
 
     fetchStats() {
-        const url = Routing.generate('cases_over_time');
+        const url = Routing.generate('cases_by_category');
         const params = {
             method: 'GET',
             headers: {
@@ -82,29 +77,19 @@ class CasesOverTime extends Component {
             });
     }
 
-    makeDatasets(categories) {
-        let datasets = [];
-        for (let category of categories) {
-            datasets.push(this.makeDataset(category));
+    makeDataset() {
+        const data = [...this.state.chartData];
+        const colors = [];
+
+        for (let i = 0; i < data.length; i++) {
+            colors.push(this.getRandomChartColor());
         }
 
-        return datasets;
-    }
-
-    makeDataset(category) {
-        const data = this.state.data.map(stats => {
-            return stats[category];
-        });
-
-        const color = this.getRandomChartColor();
-        const hidden = category != 'All';
-
         return {
-            label: category,
-            backgroundColor: color,
-            borderColor: color,
+            label: 'Cases by Category',
+            backgroundColor: colors,
             data,
-            hidden,
+            hoverOffset: 4
         };
     }
 
@@ -126,11 +111,11 @@ class CasesOverTime extends Component {
         const labels = [...this.state.labels];
         const data = {
             labels: labels,
-            datasets: [...this.state.datasets]
+            datasets: [this.makeDataset()]
           };
 
         const config = {
-            type: 'line',
+            type: 'doughnut',
             data,
             options: {
                 plugins: {
@@ -142,19 +127,27 @@ class CasesOverTime extends Component {
             }
         };
         
-        const ctx = document.getElementById('casesOverTime');
+        const ctx = document.getElementById('casesByCategory');
         this.chart = new Chart(ctx, config);
+    }
+
+    getCanvasContainerStyle() {
+        return {
+            display: "block",
+            boxSizing: "border-box",
+            width: "768px",
+        };
     }
 
     render() { 
         return (
             <div className="report-box">
                 <div className="box-header">
-                    <h1>Cases by Week</h1>
+                    <h1>Cases by Category</h1>
                 </div>
                 <div className="box-body">
-                    <div className="chart-container">
-                        <canvas id="casesOverTime"></canvas>
+                    <div className="chart-container" style={this.getCanvasContainerStyle()}>
+                        <canvas id="casesByCategory" width="384" height="768"></canvas>
                     </div>
                 </div>
             </div>
@@ -162,4 +155,4 @@ class CasesOverTime extends Component {
     }
 }
  
-export default CasesOverTime;
+export default CasesByCategory;

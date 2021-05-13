@@ -79,7 +79,15 @@ class ReportsController extends AbstractController
             $val = round($val / $totalCases, 2);
         });
 
-        return $this->json($caseTotalsByCategory);
+        $caseCategoryRatios = array();
+        foreach ($caseTotalsByCategory as $category => $ratio) {
+            $caseCategoryRatios[] = array(
+                'category' => $category,
+                'ratio' => $ratio,
+            );
+        }
+
+        return $this->json($caseCategoryRatios);
     }
 
     // TODO: The category list currently lives in the CaseType form builder. Should centralize this in a service.

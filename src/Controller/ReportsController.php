@@ -57,6 +57,37 @@ class ReportsController extends AbstractController
     }
 
     /**
+     * @Route("/reports/cases-by-day", name="cases_by_day", options={"expose"=true})
+     */
+    public function casesByDayOfWeek(DocumentManager $dm) {
+        $cases = $dm->getRepository(CaseFile::class)->findAllOrderByDate();
+        $casesByDay = array(
+            'Sunday' => null,
+            'Monday' => null,
+            'Tuesday' => null,
+            'Wednesday' => null,
+            'Thursday' => null,
+            'Friday' => null,
+            'Saturday' => null,
+        );
+
+        foreach (array_keys($casesByDay) as $day) {
+            $casesByDay[$day] = array(
+                'day' => $day,
+                'caseCount' => 0,
+            );
+        }
+
+        foreach ($cases as $case) {
+            // Organize case totals in 7 day (Sun-Sat) chunks
+            $caseDate = $case->getDate();
+            $casesByDay[$caseDate->format('l')]['caseCount'] += 1;
+        }
+
+        return $this->json(array_values($casesByDay));
+    }
+
+    /**
      * @Route("reports/cases-by-category", name="cases_by_category", options={"expose"=true})
      */
     public function casesByCategory(DocumentManager $dm) {

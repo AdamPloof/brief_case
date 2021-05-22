@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Chart from 'chart.js/auto';
 import Routing from '../../routing';
-import { chartColors } from '../utils/colors';
 
 class CasesOverTime extends Component {
     constructor(props) {
@@ -13,11 +12,10 @@ class CasesOverTime extends Component {
             labels: [],
             datasets: [],
             categories: [],
+            chartReady: false,
             loading: true,
         }
         this.chart = null;
-        this.chartColors = [...chartColors];
-        this.colorsInUse = [];
     }
 
     componentDidMount() {
@@ -25,12 +23,28 @@ class CasesOverTime extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        if (this.props.categoryColorMap != prevProps.categoryColorMap) {
+            this.setChartReady();
+        }
+
         if (this.state.data != prevState.data) {
+            this.setChartReady();
+        }
+
+        if (this.state.chartReady != prevState.chartReady && this.state.chartReady == true) {
             this.setChartData();
         }
 
-        if (this.state.datasets != prevState.datasets && this.state.datasets.length != 0) {
+        if (this.state.datasets != prevState.datasets) {
             this.updateChart();
+        }
+    }
+
+    setChartReady() {
+        if (this.props.categoryColorMap !== null && this.state.data.length != 0) {
+            this.setState({
+                chartReady: true,
+            });
         }
     }
 
@@ -96,8 +110,9 @@ class CasesOverTime extends Component {
             return stats[category];
         });
 
-        const color = this.getRandomChartColor();
+        const color = category == 'All' ? 'rgb(245, 111, 66)' : this.props.categoryColorMap.get(category);
         const hidden = category != 'All';
+        // 245, 111, 66
 
         return {
             label: category,
@@ -106,20 +121,6 @@ class CasesOverTime extends Component {
             data,
             hidden,
         };
-    }
-
-    getRandomChartColor() {
-        // Recycle colors in use back into available colors once all colors have been used
-        // Rinse and repeat as needed.
-        if (this.chartColors.length == 0) {
-            this.chartColors = [...this.colorsInUse];
-            this.colorsInUse = [];
-        }
-
-        let color = this.chartColors.pop();
-        this.colorsInUse.push(color);
-
-        return color;
     }
 
     drawChart() {

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Chart from 'chart.js/auto';
-import Routing from '../../routing';
-import { chartColors } from '../utils/colors';
 
 class CasesByCategory extends Component {
     constructor(props) {
@@ -9,22 +7,15 @@ class CasesByCategory extends Component {
         this.state = {
             startDate: null,
             endDate: null,
-            data: [],
             labels: [],
             chartData: [],
             loading: true,
         }
         this.chart = null;
-        this.chartColors = [...chartColors];
-        this.colorsInUse = [];
-    }
-
-    componentDidMount() {
-        this.fetchStats();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (this.state.data != prevState.data) {
+        if (this.props.data != prevProps.data) {
             this.setChartData();
         }
 
@@ -34,10 +25,10 @@ class CasesByCategory extends Component {
     }
 
     setChartData() {
-        const labels = this.state.data.map(stats => {
+        const labels = this.props.data.map(stats => {
             return stats.category;
         });
-        const chartData = this.state.data.map(stats => {
+        const chartData = this.props.data.map(stats => {
             return stats.ratio;
         });
         
@@ -56,33 +47,12 @@ class CasesByCategory extends Component {
         this.chart.update('reset');
     }
 
-    fetchStats() {
-        const url = Routing.generate('cases_by_category');
-        const params = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }
-
-        fetch(url, params).then(res => res.json())
-            .then(data => {
-                this.setState({
-                    data,
-                    loading: false,
-                })
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }
-
     makeDataset() {
         const data = [...this.state.chartData];
         const colors = [];
 
-        for (let i = 0; i < data.length; i++) {
-            colors.push(this.getRandomChartColor());
+        for (let categoryData of this.props.data) {
+            colors.push(this.props.categoryColorMap.get(categoryData.category));
         }
 
         return {
@@ -91,20 +61,6 @@ class CasesByCategory extends Component {
             data,
             hoverOffset: 4
         };
-    }
-
-    getRandomChartColor() {
-        // Recycle colors in use back into available colors once all colors have been used
-        // Rinse and repeat as needed.
-        if (this.chartColors.length == 0) {
-            this.chartColors = [...this.colorsInUse];
-            this.colorsInUse = [];
-        }
-
-        let color = this.chartColors.pop();
-        this.colorsInUse.push(color);
-
-        return color;
     }
 
     drawChart() {
